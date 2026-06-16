@@ -64,6 +64,7 @@ function ContentPanel({ t, borderTop }) {
 export default function ProductsSection() {
   const { t } = useLang()
   const PRODUCTS = t.PRODUCTS
+  const { heading } = t.PRODUCTS_SECTION
   const [activeIndex, setActiveIndex] = useState(0)
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 900)
@@ -87,10 +88,16 @@ export default function ProductsSection() {
     return () => window.removeEventListener('resize', handle)
   }, [])
 
+  function selectProduct(i) {
+    setActiveIndex(i)
+    window.history.replaceState(null, '', `#produto-${PRODUCTS[i].id}`)
+  }
+
   function handleMobileClick(i) {
     const next = i === activeIndex ? -1 : i
     setActiveIndex(next)
     if (next !== -1) {
+      window.history.replaceState(null, '', `#produto-${PRODUCTS[next].id}`)
       setTimeout(() => {
         itemRefs.current[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }, 50)
@@ -115,8 +122,9 @@ export default function ProductsSection() {
           marginBottom: 56,
           lineHeight: 1.15,
         }}>
-          Seja fronteira da{' '}
-          <span style={{ fontWeight: 600, textDecoration: 'underline' }}>IA na saúde</span>.
+          {heading.before}
+          <span style={{ fontWeight: 600, textDecoration: 'underline' }}>{heading.emphasis}</span>
+          {heading.end}
         </h2>
 
         {isMobile ? (
@@ -192,7 +200,7 @@ export default function ProductsSection() {
                 return (
                   <button
                     key={t.id}
-                    onClick={() => setActiveIndex(i)}
+                    onClick={() => selectProduct(i)}
                     onMouseEnter={() => setHoveredIndex(i)}
                     onMouseLeave={() => setHoveredIndex(null)}
                     style={{

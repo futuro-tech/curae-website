@@ -22,9 +22,18 @@ const CONTENT = {
 export const LangContext = createContext(null)
 
 export function LangProvider({ children }) {
-  const [lang, setLang] = useState('pt')
+  const [lang, setLang] = useState(() => {
+    const saved = localStorage.getItem('curae-lang')
+    return saved === 'en' ? 'en' : 'pt'
+  })
+
+  function handleSetLang(l) {
+    localStorage.setItem('curae-lang', l)
+    setLang(l)
+  }
+
   return (
-    <LangContext.Provider value={{ lang, setLang, t: CONTENT[lang] }}>
+    <LangContext.Provider value={{ lang, setLang: handleSetLang, t: CONTENT[lang] }}>
       {children}
     </LangContext.Provider>
   )

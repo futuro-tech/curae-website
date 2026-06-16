@@ -10,34 +10,33 @@ export const NAV = {
 export const HERO = {
   headline: {
     line1: 'Precision and',
-    line2: 'efficiency in healthcare',
-    line3: 'save ',
-    emphasis1: 'time',
-    line4: 'Of ',
-    emphasis2: 'life',
+    line2: 'efficiency save',
+    line3: 'time ',
+    emphasis1: 'where it',
+    emphasis2: 'matters most',
     end: '.',
   },
-  paragraph: 'Curae researches and develops products that support early detection of complex conditions and improve hospital throughput.',
+  paragraph: 'Curae researches and develops AI-powered solutions that support earlier diagnosis and optimize hospital operations.',
   partnersLabel: 'Partners',
   article: {
     badge: 'Published Article',
     source: 'Futuro Tech / Curae • April 2026',
-    title: 'Construction of a classification model for dementia among Brazilian adults aged 50 and over',
+    title: 'Construction of a Classification Model for Dementia Among Brazilian Adults Aged 50 and Over.',
     cta: 'Read publication →',
     href: 'https://www.frontiersin.org/journals/aging-neuroscience/articles/10.3389/fnagi.2026.1789012/full',
   },
 }
 
 export const POSITIONING = {
-  paragraph1: 'Every day, hospitals and care providers generate massive volumes of clinical data.',
+  paragraph1: 'Hospitals and specialized care providers generate large volumes of data every day.',
   paragraph2: {
-    text: 'Yet turning it into faster decisions and preventive action is still a challenge — fragmented systems and rising cost pressure make it hard. ',
+    text: 'Yet turning that data into preventive action and faster decision-making remains a challenge due to fragmented systems and growing pressure to reduce costs. ',
     emphasis: 'We take care of that.',
   },
 }
 
 export const BENEFITS = {
-  heading: 'Predictive intelligence for smarter healthcare operations and clinical decisions.',
+  heading: 'Predictive intelligence for healthcare operations and clinical decision-making',
   description: 'Self-improving technology that continuously adapts to deliver more accurate insights.',
   boxes: [
     'Faster\ndiagnosis',
@@ -53,18 +52,22 @@ export const DIFERENCIAIS = {
     end: '.',
   },
   items: [
-    { title: 'Auditable and ethical AI' },
+    { title: 'Transparent, auditable and ethical AI' },
     { title: 'Developed alongside leading healthcare institutions' },
     { title: 'Academic research and validation' },
     { title: 'Privacy and security by design' },
   ],
 }
 
+export const PRODUCTS_SECTION = {
+  heading: { before: 'Bringing AI to the ', emphasis: 'front lines of healthcare', end: '.' },
+}
+
 export const TEAM_CONTENT = {
-  tagline: 'A team of PhDs, researchers, and universities applying AI to clinical science and hospital management.',
+  tagline: 'A team of PhDs, researchers, and academic institutions applying AI to clinical science and healthcare operations.',
   heading: {
-    before: 'Not by chance, ',
-    emphasis: 'Curae means to care',
+    before: 'After all,',
+    emphasis: 'Curae means care',
     end: '.',
   },
 }
@@ -98,7 +101,7 @@ export const FOOTER_CONTENT = {
     { name: 'Voice-Based Cancer Screening', id: 'voz' },
     { name: 'Problem Gambling Risk Detection', id: 'ludopatia' },
   ],
-  legalLinks: ['Privacy Policy', 'Terms of Use', 'LGPD'],
+  legalLinks: [],
   address: ['Rua Madre de Deus, 300', 'Recife Antigo — Recife, PE, Brazil'],
   copyright: '© 2026 Curae Ltda. All rights reserved.',
 }
@@ -154,11 +157,11 @@ export const PRODUCTS_TEXT = [
     name: 'Risk-Based Patient Prioritization',
     badge: '94.7% Sensitivity',
     category: '+ HOSPITAL OPERATIONS',
-    heading: 'Reduce clinical risk with automated patient queue ordering',
+    heading: 'Improve patient prioritization with continuously learning system',
     description: 'AI model for dynamic patient prioritization based on clinical, demographic, and regulatory data integrated with the hospital information system.',
     bullets: [
-      'Automatically updates priorities and criteria without manual intervention.',
-      'Reduces risk classification errors.',
+      'Automatically updates priorities and criteria without manual intervention',
+      'Reduces risk classification errors',
     ],
   },
   {
@@ -190,7 +193,7 @@ export const PRODUCTS_TEXT = [
     name: 'Problem Gambling Risk Detection',
     badge: '2.4× Anticipation',
     category: '+ MENTAL HEALTH',
-    heading: 'Anticipate problem gambling risk and support public health action',
+    heading: 'Anticipate gambling addiction risk and support public health initiatives',
     description: 'Predictive model based on behavioral patterns associated with gambling addiction risk.',
     bullets: [
       'Supports more targeted public health interventions.',

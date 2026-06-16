@@ -18,5 +18,5 @@ export const PARTNERS_FOOTER = [
   { name: 'IMIP',   src: `${BASE}/adb5487e159d3f7683940f2a6536864537e5a026?width=69`,  h: 21 },
   { name: 'HCP',    src: `${BASE}/b67879c3e45ff583b3a57ce9bb193b443789246f?width=71`,  h: 17 },
   { name: 'Fleury', src: `${BASE}/ec02e045c359f48bc10aa24dc50979b1abc4118c?width=64`,  h: 14 },
-  { name: 'Femme',  src: `${BASE}/93e53a0eaffd8b41f9aa087e17cf8016e55d2c76?width=85`,  h: 16, filter: 'brightness(0) invert(1)' },
+  { name: 'Femme',  src: `${BASE}/93e53a0eaffd8b41f9aa087e17cf8016e55d2c76?width=85`,  h: 16, filter: 'grayscale(1) invert(1)', blend: 'screen' },
 ]

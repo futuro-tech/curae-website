@@ -1,9 +1,10 @@
 import PartnersLogos from '../components/PartnersLogos'
 import { PARTNERS_CTA } from '../data/partners'
-import { CTA_CONTENT } from '../data/content'
+import { useLang } from '../context/LangContext'
 
 export default function CTASection() {
-  const { heading, description, button, partnersLabel } = CTA_CONTENT
+  const { t } = useLang()
+  const { heading, description, button, partnersLabel } = t.CTA_CONTENT
   return (
     <section id="contato" style={{ background: '#EEF2F5', padding: 'clamp(48px, 6vw, 80px) var(--section-px)' }}>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>

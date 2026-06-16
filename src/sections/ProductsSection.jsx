@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { PRODUCTS } from '../data/products'
+import { useLang } from '../context/LangContext'
 
 function ContentPanel({ t, borderTop }) {
   return (
@@ -62,6 +62,8 @@ function ContentPanel({ t, borderTop }) {
 }
 
 export default function ProductsSection() {
+  const { t } = useLang()
+  const PRODUCTS = t.PRODUCTS
   const [activeIndex, setActiveIndex] = useState(0)
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 900)

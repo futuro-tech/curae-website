@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { BENEFITS } from '../data/content'
+import { useLang } from '../context/LangContext'
 
 const BENEFITS_IMG = 'https://api.builder.io/api/v1/image/assets/TEMP/9f892727f73a1543d44c80bc224d6cb56f373fed?width=256'
 
 export default function BenefitsSection() {
+  const { t } = useLang()
+  const BENEFITS = t.BENEFITS
   const [hoveredIndex, setHoveredIndex] = useState(null)
   return (
     <section id="tecnologia" style={{

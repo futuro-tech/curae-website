@@ -1,10 +1,33 @@
 import { useState, useEffect } from 'react'
 import CuraeLogo from '../components/CuraeLogo'
-import { NAV } from '../data/content'
+import { useLang } from '../context/LangContext'
+
+function LangToggle({ lang, setLang, dark }) {
+  const base = { background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontSize: 12, padding: '2px 5px', transition: 'color 0.15s' }
+  const active = dark ? '#FAFAFA' : '#0D1B2A'
+  const inactive = dark ? 'rgba(255,255,255,0.35)' : '#9AA5B1'
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+      {['pt', 'en'].map((l, i) => (
+        <span key={l} style={{ display: 'flex', alignItems: 'center' }}>
+          {i > 0 && <span style={{ color: dark ? 'rgba(255,255,255,0.2)' : '#D1D9E0', fontSize: 11, margin: '0 2px' }}>|</span>}
+          <button
+            onClick={() => setLang(l)}
+            style={{ ...base, fontWeight: lang === l ? 600 : 400, color: lang === l ? active : inactive }}
+          >
+            {l.toUpperCase()}
+          </button>
+        </span>
+      ))}
+    </div>
+  )
+}
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { lang, setLang, t } = useLang()
+  const { NAV } = t
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -52,11 +75,14 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <LangToggle lang={lang} setLang={setLang} dark={false} />
+
           <a
             href="https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+saber+mais!"
             target="_blank"
             rel="noopener noreferrer"
+            className="nav-desktop"
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               padding: '10px 20px', borderRadius: 4, background: '#0D1B2A',
@@ -106,6 +132,21 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <a
+            href="https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+saber+mais!"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMenuOpen(false)}
+            style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              padding: '12px 20px', borderRadius: 4, background: '#0D1B2A',
+              color: '#FAFAFA', fontFamily: "'DM Sans', sans-serif",
+              fontSize: 15, fontWeight: 500, textAlign: 'center',
+            }}
+          >
+            {NAV.cta}
+          </a>
+          <LangToggle lang={lang} setLang={setLang} dark={false} />
         </div>
       )}
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DIFERENCIAIS } from '../data/content'
+import { useLang } from '../context/LangContext'
 
 const ICONS = [
   (
@@ -29,10 +29,10 @@ const ICONS = [
   ),
 ]
 
-const ITEMS = DIFERENCIAIS.items.map((item, i) => ({ ...item, icon: ICONS[i] }))
-
 export default function DiferenciaisSection() {
-  const { heading } = DIFERENCIAIS
+  const { t } = useLang()
+  const { heading, items } = t.DIFERENCIAIS
+  const ITEMS = items.map((item, i) => ({ ...item, icon: ICONS[i] }))
   const [hoveredIndex, setHoveredIndex] = useState(null)
   return (
     <section style={{ background: '#FAFAFA', padding: 'clamp(64px, 8vw, 100px) var(--section-px)' }}>

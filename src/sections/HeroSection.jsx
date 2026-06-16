@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import PartnersLogos from '../components/PartnersLogos'
 import { PARTNERS_HERO } from '../data/partners'
-import { HERO } from '../data/content'
+import { useLang } from '../context/LangContext'
 
 const HERO_IMG = 'https://api.builder.io/api/v1/image/assets/TEMP/505760c7436e51894b22ecc5f5665f883830b103?width=2976'
 
 export default function HeroSection() {
-  const { headline: h, article } = HERO
+  const { t } = useLang()
+  const { headline: h, article } = t.HERO
   const [articleHovered, setArticleHovered] = useState(false)
   return (
     <section id="produtos" style={{
@@ -69,7 +70,7 @@ export default function HeroSection() {
           color: '#4A5568',
           maxWidth: 380,
         }}>
-          {HERO.paragraph}
+          {t.HERO.paragraph}
         </p>
       </div>
 
@@ -96,7 +97,7 @@ export default function HeroSection() {
             textTransform: 'uppercase',
             flexShrink: 0
           }}>
-            {HERO.partnersLabel}
+            {t.HERO.partnersLabel}
           </span>
           <PartnersLogos partners={PARTNERS_HERO} gap={24} />
         </div>

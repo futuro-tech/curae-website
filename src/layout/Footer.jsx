@@ -1,12 +1,13 @@
 import CuraeLogo from '../components/CuraeLogo'
 import PartnersLogos from '../components/PartnersLogos'
 import { PARTNERS_FOOTER } from '../data/partners'
-import { FOOTER_CONTENT } from '../data/content'
+import { useLang } from '../context/LangContext'
 
 const col = (opacity) => `rgba(255,255,255,${opacity})`
 
 export default function Footer() {
-  const { tagline, description, socials, sections, productLinks, legalLinks, address, copyright } = FOOTER_CONTENT
+  const { t } = useLang()
+  const { tagline, description, socials, sections, productLinks, legalLinks, address, copyright } = t.FOOTER_CONTENT
   return (
     <footer style={{
       background: '#0A1520',

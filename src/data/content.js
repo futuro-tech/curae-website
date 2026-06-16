@@ -22,7 +22,7 @@ export const HERO = {
   article: {
     badge: 'Artigo Publicado',
     source: 'Futuro Tech / Curae • Abril 2026',
-    title: 'Construction of a classification model for dementia among Brazilian adults aged 50 and over',
+    title: 'Construction of a Classification Model for Dementia Among Brazilian Adults Aged 50 and Over.',
     cta: 'Ler publicação →',
     href: 'https://www.frontiersin.org/journals/aging-neuroscience/articles/10.3389/fnagi.2026.1789012/full',
   },
@@ -77,6 +77,10 @@ export const TEAM_CONTENT = {
   },
 }
 
+export const PRODUCTS_SECTION = {
+  heading: { before: 'Seja fronteira da ', emphasis: 'IA na saúde', end: '.' },
+}
+
 export const CTA_CONTENT = {
   heading: {
     before: 'Inicie um ',
@@ -106,7 +110,7 @@ export const FOOTER_CONTENT = {
     { name: 'Triagem Oncológica por Voz', id: 'voz' },
     { name: 'Prevenção ao Risco de Ludopatia', id: 'ludopatia' },
   ],
-  legalLinks: ['Política de Privacidade', 'Termos de Uso', 'LGPD'],
+  legalLinks: [],
   address: ['Rua Madre de Deus, 300', 'Recife Antigo — Recife, PE'],
   copyright: '© 2026 Curae Ltda. Todos os direitos reservados.',
 }

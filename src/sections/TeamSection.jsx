@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
-import { TEAM } from '../data/team'
-import { TEAM_CONTENT } from '../data/content'
+import { useLang } from '../context/LangContext'
 
 const BIO_LIMIT = 180
 
-function TeamModal({ member, onClose }) {
+function TeamModal({ member, onClose, lang }) {
   const [visible, setVisible] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const isLong = member.bio && member.bio.length > BIO_LIMIT
@@ -150,7 +149,9 @@ function TeamModal({ member, onClose }) {
                     textUnderlineOffset: 2,
                   }}
                 >
-                  {expanded ? 'Ler menos' : 'Ler mais'}
+                  {expanded
+                    ? (lang === 'en' ? 'Read less' : 'Ler menos')
+                    : (lang === 'en' ? 'Read more' : 'Ler mais')}
                 </button>
               )}
             </div>
@@ -244,7 +245,8 @@ function TeamCard({ member, onClick }) {
 }
 
 export default function TeamSection() {
-  const { tagline, heading } = TEAM_CONTENT
+  const { t, lang } = useLang()
+  const { tagline, heading } = t.TEAM_CONTENT
   const [selected, setSelected] = useState(null)
 
   return (
@@ -285,14 +287,14 @@ export default function TeamSection() {
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '48px 24px',
         }}>
-          {TEAM.map(m => (
+          {t.TEAM.map(m => (
             <TeamCard key={m.name} member={m} onClick={setSelected} />
           ))}
         </div>
 
       </div>
 
-      {selected && <TeamModal member={selected} onClose={() => setSelected(null)} />}
+      {selected && <TeamModal member={selected} onClose={() => setSelected(null)} lang={lang} />}
 
       <style>{`
         @media (max-width: 768px) {

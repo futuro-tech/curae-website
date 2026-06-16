@@ -1,9 +1,10 @@
-import { POSITIONING } from '../data/content'
+import { useLang } from '../context/LangContext'
 
 const HASSAN_IMG = 'https://api.builder.io/api/v1/image/assets/TEMP/505760c7436e51894b22ecc5f5665f883830b103?width=2976'
 
 export default function PositioningSection() {
-  const { paragraph1, paragraph2 } = POSITIONING
+  const { t } = useLang()
+  const { paragraph1, paragraph2 } = t.POSITIONING
   return (
     <section style={{
       background: 'white',

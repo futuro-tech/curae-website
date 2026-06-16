@@ -29,18 +29,33 @@ export default function CTASection() {
 
           <a
             href={button.href}
+            className="cta-btn"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               padding: '14px 32px', borderRadius: 4, background: '#0D1B2A',
               color: '#FAFAFA', fontFamily: "'DM Sans', sans-serif",
               fontSize: 15, fontWeight: 500, lineHeight: '22.5px',
               marginBottom: 48, transition: 'background 0.15s',
+              whiteSpace: 'nowrap', textAlign: 'center',
             }}
             onMouseEnter={e => e.currentTarget.style.background = '#1a2f45'}
             onMouseLeave={e => e.currentTarget.style.background = '#0D1B2A'}
           >
             {button.label}
           </a>
+
+          <style>{`
+            @media (max-width: 560px) {
+              .cta-btn {
+                width: 100% !important;
+                white-space: normal !important;
+                font-size: 14px !important;
+                padding: 14px 20px !important;
+              }
+            }
+          `}</style>
 
           <div style={{ width: '100%', borderTop: '0.5px solid #D1D9E0', paddingTop: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
             <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 400, color: '#9AA5B1', letterSpacing: '0.8px', textTransform: 'uppercase' }}>

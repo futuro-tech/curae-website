@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import PartnersLogos from '../components/PartnersLogos'
 import { PARTNERS_HERO } from '../data/partners'
 import { HERO } from '../data/content'
@@ -6,6 +7,7 @@ const HERO_IMG = 'https://api.builder.io/api/v1/image/assets/TEMP/505760c7436e51
 
 export default function HeroSection() {
   const { headline: h, article } = HERO
+  const [articleHovered, setArticleHovered] = useState(false)
   return (
     <section id="produtos" style={{
       background: '#FAFAFA',
@@ -101,72 +103,101 @@ export default function HeroSection() {
       </div>
 
       {/* Article bar */}
-      <div style={{ background: '#0D1B2A', padding: '14px var(--section-px)' }}>
-        <div style={{
+      <a
+        href={article.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onMouseEnter={() => setArticleHovered(true)}
+        onMouseLeave={() => setArticleHovered(false)}
+        className="article-bar"
+        style={{
+          display: 'block',
+          background: articleHovered ? '#162435' : '#0D1B2A',
+          padding: '14px var(--section-px)',
+          transition: 'background 0.2s ease',
+          textDecoration: 'none',
+          borderTop: articleHovered ? '0.5px solid rgba(94,204,195,0.25)' : '0.5px solid transparent',
+        }}
+      >
+        {/* Desktop layout */}
+        <div className="article-bar__desktop" style={{
           maxWidth: 1244,
           margin: '0 auto',
           display: 'flex',
           alignItems: 'center',
           gap: 16,
-          flexWrap: 'wrap',
         }}>
           <span style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            padding: '4px 8px',
-            borderRadius: 2,
+            display: 'inline-flex', alignItems: 'center',
+            padding: '4px 8px', borderRadius: 2,
             background: '#E1F5EE',
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: 10,
-            fontWeight: 500,
-            color: '#1A7A6E',
-            letterSpacing: '0.8px',
-            textTransform: 'uppercase',
-            flexShrink: 0,
+            fontSize: 10, fontWeight: 500, color: '#1A7A6E',
+            letterSpacing: '0.8px', textTransform: 'uppercase', flexShrink: 0,
           }}>
             {article.badge}
           </span>
           <span style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 11,
-            color: 'rgba(255,255,255,0.35)',
-            flexShrink: 0,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+            color: 'rgba(255,255,255,0.35)', flexShrink: 0,
           }}>
             {article.source}
           </span>
           <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.15)', flexShrink: 0 }} />
           <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 13,
-            color: 'rgba(255,255,255,0.60)',
-            lineHeight: '19.5px',
-            flex: 1,
-            minWidth: 200,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+            color: 'rgba(255,255,255,0.60)', lineHeight: '19.5px', flex: 1,
           }}>
             {article.title}
           </p>
-          <a
-            href={article.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 13,
-              fontWeight: 500,
-              color: '#FAFAFA',
-              opacity: 0.85,
-              whiteSpace: 'nowrap',
-              transition: 'opacity 0.15s',
-            }}
-            onMouseEnter={e => e.currentTarget.style.opacity = 1}
-            onMouseLeave={e => e.currentTarget.style.opacity = 0.85}
-          >
+          <span style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
+            color: articleHovered ? '#5ECCC3' : '#FAFAFA',
+            opacity: articleHovered ? 1 : 0.85, whiteSpace: 'nowrap',
+            transition: 'color 0.2s ease, opacity 0.2s ease',
+          }}>
             {article.cta}
-          </a>
+          </span>
         </div>
-      </div>
+
+        {/* Mobile layout */}
+        <div className="article-bar__mobile" style={{ maxWidth: 1244, margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center',
+              padding: '3px 7px', borderRadius: 2, background: '#E1F5EE',
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 9, fontWeight: 500, color: '#1A7A6E',
+              letterSpacing: '0.7px', textTransform: 'uppercase', flexShrink: 0,
+            }}>
+              {article.badge}
+            </span>
+            <span style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+              color: 'rgba(255,255,255,0.35)',
+            }}>
+              {article.source}
+            </span>
+          </div>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+            color: 'rgba(255,255,255,0.65)', lineHeight: 1.5, marginBottom: 10,
+          }}>
+            {article.title}
+          </p>
+          <span style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
+            color: '#5ECCC3',
+          }}>
+            {article.cta}
+          </span>
+        </div>
+      </a>
 
       <style>{`
+        .article-bar__mobile { display: none; }
+        .article-bar__desktop { display: flex; }
+
         @media (max-width: 768px) {
           #produtos > div[style*="grid"] {
             grid-template-columns: 1fr !important;
@@ -175,6 +206,9 @@ export default function HeroSection() {
           #produtos > div[style*="grid"] p {
             margin-left: 0 !important;
           }
+          .article-bar__desktop { display: none !important; }
+          .article-bar__mobile  { display: block !important; }
+          .article-bar { padding: 16px var(--section-px) !important; }
         }
       `}</style>
     </section>

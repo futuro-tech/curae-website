@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { DIFERENCIAIS } from '../data/content'
 
 const ICONS = [
@@ -32,6 +33,7 @@ const ITEMS = DIFERENCIAIS.items.map((item, i) => ({ ...item, icon: ICONS[i] }))
 
 export default function DiferenciaisSection() {
   const { heading } = DIFERENCIAIS
+  const [hoveredIndex, setHoveredIndex] = useState(null)
   return (
     <section style={{ background: '#FAFAFA', padding: 'clamp(64px, 8vw, 100px) var(--section-px)' }}>
       <div style={{
@@ -54,14 +56,27 @@ export default function DiferenciaisSection() {
         </h2>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {ITEMS.map(item => (
-            <div key={item.title} style={{
-              display: 'flex', alignItems: 'center', gap: 16,
-              padding: '20px 28px', borderRadius: 6, border: '0.5px solid #D1D9E0', background: '#FFF',
-            }}>
+          {ITEMS.map((item, i) => (
+            <div
+              key={item.title}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 16,
+                padding: '20px 28px', borderRadius: 6,
+                border: hoveredIndex === i ? '0.5px solid #1A7A6E' : '0.5px solid #D1D9E0',
+                background: '#FFF',
+                transform: hoveredIndex === i ? 'translateY(-2px)' : 'translateY(0)',
+                boxShadow: hoveredIndex === i ? '0 6px 20px rgba(26,122,110,0.10)' : 'none',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+                cursor: 'default',
+              }}
+            >
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 36, height: 36, borderRadius: 4, background: '#E1F5EE', flexShrink: 0,
+                width: 36, height: 36, borderRadius: 4,
+                background: hoveredIndex === i ? '#C8EDE7' : '#E1F5EE',
+                flexShrink: 0, transition: 'background 0.2s ease',
               }}>
                 {item.icon}
               </div>

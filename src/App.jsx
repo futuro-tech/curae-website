@@ -10,7 +10,7 @@ import CTASection from './sections/CTASection'
 
 export default function App() {
   return (
-    <div style={{ background: '#ffffff', overflowX: 'hidden' }}>
+    <div style={{ background: '#ffffff', overflowX: 'hidden', paddingTop: 64 }}>
       <Navbar />
       <HeroSection />
       <PositioningSection />

@@ -52,12 +52,20 @@ export default function Footer() {
               {sections.products}
             </p>
             {productLinks.map(p => (
-              <a key={p} href="#produtos-section"
-                style={{ display: 'block', fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: col(0.5), lineHeight: '19.5px', paddingTop: 10, transition: 'color 0.15s' }}
+              <a
+                key={p.id}
+                href="#produtos-section"
+                onClick={e => {
+                  e.preventDefault()
+                  window.history.pushState(null, '', `#produto-${p.id}`)
+                  window.dispatchEvent(new HashChangeEvent('hashchange'))
+                  document.getElementById('produtos-section')?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                style={{ display: 'block', fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: col(0.5), lineHeight: '19.5px', paddingTop: 10, transition: 'color 0.15s', cursor: 'pointer' }}
                 onMouseEnter={e => e.currentTarget.style.color = col(0.85)}
                 onMouseLeave={e => e.currentTarget.style.color = col(0.5)}
               >
-                {p}
+                {p.name}
               </a>
             ))}
           </div>

@@ -4,7 +4,7 @@ export const NAV = {
     { label: 'Tecnologia', href: '#tecnologia' },
     { label: 'Time', href: '#sobre' },
   ],
-  cta: 'Iniciar conversa',
+  cta: 'Fale conosco',
 }
 
 export const HERO = {
@@ -41,7 +41,7 @@ export const BENEFITS = {
   description: 'Tecnologia que evolui a precisão continuamente para melhor fluxo operacional e decisão clínica.',
   boxes: [
     'Menos tempo\naté diagnóstico',
-    'Menos frição para a\noperação e pacientes',
+    'Menos fricção para a\noperação e pacientes',
     'Antecipação de\ndemandas assistenciais',
   ],
 }
@@ -85,7 +85,7 @@ export const CTA_CONTENT = {
   description: 'A gente sabe que tempo é tudo. Solicite uma conversa e entraremos em contato o mais breve possível.',
   button: {
     label: 'Fale com nosso especialista →',
-    href: 'mailto:contato@curae.ai',
+    href: 'https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+saber+mais!',
   },
   partnersLabel: 'Parceiros',
 }
@@ -93,21 +93,18 @@ export const CTA_CONTENT = {
 export const FOOTER_CONTENT = {
   tagline: 'Uma empresa Futuro Tech',
   description: 'Pesquisa aplicada e desenvolvimento de soluções de inteligência artificial para predição de risco, operação e decisões clínicas de saúde de alta complexidade.',
-  socials: [
-    { label: 'LinkedIn', href: 'https://linkedin.com' },
-    { label: 'Instagram', href: 'https://instagram.com' },
-  ],
+  socials: [],
   sections: {
     products: 'Produtos',
     address: 'Endereço',
     partners: 'Parceiros',
   },
   productLinks: [
-    'Eficiência do Bloco Cirúrgico',
-    'Priorização de Pacientes por Risco',
-    'Assistência ao Diagnóstico de Endometriose',
-    'Triagem Oncológica por Voz',
-    'Prevenção ao Risco de Ludopatia',
+    { name: 'Eficiência do Bloco Cirúrgico', id: 'bloco' },
+    { name: 'Priorização de Pacientes por Risco', id: 'risco' },
+    { name: 'Assistência ao Diagnóstico de Endometriose', id: 'endometriose' },
+    { name: 'Triagem Oncológica por Voz', id: 'voz' },
+    { name: 'Prevenção ao Risco de Ludopatia', id: 'ludopatia' },
   ],
   legalLinks: ['Política de Privacidade', 'Termos de Uso', 'LGPD'],
   address: ['Rua Madre de Deus, 300', 'Recife Antigo — Recife, PE'],

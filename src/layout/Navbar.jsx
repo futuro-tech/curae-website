@@ -14,7 +14,7 @@ export default function Navbar() {
 
   return (
     <nav style={{
-      position: 'sticky',
+      position: 'fixed',
       top: 0,
       zIndex: 100,
       width: '100%',
@@ -54,7 +54,9 @@ export default function Navbar() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <a
-            href="#contato"
+            href="https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+saber+mais!"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               padding: '10px 20px', borderRadius: 4, background: '#0D1B2A',

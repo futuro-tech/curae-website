@@ -1,7 +1,7 @@
 export const PRODUCTS = [
   {
     id: 'bloco',
-    name: 'Eficiência do bloco cirúrgico',
+    name: 'Eficiência do Bloco Cirúrgico',
     badge: '+31% Utilização',
     category: '+ GESTÃO HOSPITALAR',
     heading: 'Faça mais cirurgias com menos atrasos sem aumentar estrutura operacional',
@@ -23,7 +23,7 @@ export const PRODUCTS = [
   },
   {
     id: 'risco',
-    name: 'Priorização de pacientes por risco',
+    name: 'Priorização de Pacientes por Risco',
     badge: '94.7% Sensibilidade',
     category: '+ GESTÃO HOSPITALAR',
     heading: 'Diminua riscos clínicos com ordenação automática de filas',
@@ -41,7 +41,7 @@ export const PRODUCTS = [
   },
   {
     id: 'endometriose',
-    name: 'Assistência ao diagnóstico de endometriose',
+    name: 'Assistência ao Diagnóstico de Endometriose',
     badge: '−43% Mortalidade',
     category: '+ ASSISTÊNCIA AO DIAGNÓSTICO',
     heading: 'Reduza o tempo de diagnóstico de endometriose na primeira ultrassonografia',
@@ -59,7 +59,7 @@ export const PRODUCTS = [
   },
   {
     id: 'voz',
-    name: 'Triagem oncológica por voz',
+    name: 'Triagem Oncológica por Voz',
     badge: '6× Mais Rápido',
     category: '+ ASSISTÊNCIA AO DIAGNÓSTICO',
     heading: 'Agilize a triagem de câncer de cabeça e pescoço pela análise de voz',
@@ -77,7 +77,7 @@ export const PRODUCTS = [
   },
   {
     id: 'ludopatia',
-    name: 'Prevenção ao risco de Ludopatia',
+    name: 'Prevenção ao Risco de Ludopatia',
     badge: '2.4× Antecipação',
     category: '+ SAÚDE MENTAL',
     heading: 'Antecipe riscos de Ludopatia e oriente iniciativas de saúde pública',

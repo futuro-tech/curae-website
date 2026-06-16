@@ -12,6 +12,7 @@ export default function PartnersLogos({ partners, gap = 24 }) {
             width: 'auto',
             objectFit: 'contain',
             mixBlendMode: p.blend ? 'multiply' : 'normal',
+            filter: p.filter ?? 'none',
             flexShrink: 0,
           }}
         />

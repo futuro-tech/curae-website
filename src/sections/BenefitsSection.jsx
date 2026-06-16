@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { BENEFITS } from '../data/content'
 
 const BENEFITS_IMG = 'https://api.builder.io/api/v1/image/assets/TEMP/9f892727f73a1543d44c80bc224d6cb56f373fed?width=256'
 
 export default function BenefitsSection() {
+  const [hoveredIndex, setHoveredIndex] = useState(null)
   return (
     <section id="tecnologia" style={{
       background: '#FAFAFA',
@@ -52,31 +54,41 @@ export default function BenefitsSection() {
         </p>
 
         {/* 3 cards */}
-        <div style={{
+        <div className="benefits-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 16,
           width: '100%',
           maxWidth: 780,
         }}>
-          {BENEFITS.boxes.map(text => (
-            <div key={text} style={{
-              padding: '20px 20px',
-              borderRadius: 8,
-              background: '#EEF2F5',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minHeight: 80,
-            }}>
+          {BENEFITS.boxes.map((text, i) => (
+            <div
+              key={text}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              style={{
+                padding: '20px 20px',
+                borderRadius: 8,
+                background: hoveredIndex === i ? '#E2EAF0' : '#EEF2F5',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: 80,
+                transform: hoveredIndex === i ? 'translateY(-3px)' : 'translateY(0)',
+                boxShadow: hoveredIndex === i ? '0 8px 24px rgba(13,27,42,0.10)' : 'none',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease',
+                cursor: 'default',
+              }}
+            >
               <p style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 15,
-                fontWeight: 400,
+                fontWeight: hoveredIndex === i ? 500 : 400,
                 lineHeight: 1.55,
-                color: '#4A5568',
+                color: hoveredIndex === i ? '#0D1B2A' : '#4A5568',
                 textAlign: 'center',
                 whiteSpace: 'pre-line',
+                transition: 'color 0.2s ease, font-weight 0.2s ease',
               }}>
                 {text}
               </p>
@@ -87,7 +99,7 @@ export default function BenefitsSection() {
 
       <style>{`
         @media (max-width: 640px) {
-          #benefits-cards { grid-template-columns: 1fr !important; }
+          .benefits-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

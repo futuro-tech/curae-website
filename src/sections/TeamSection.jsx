@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react'
 import { TEAM } from '../data/team'
 import { TEAM_CONTENT } from '../data/content'
 
+const BIO_LIMIT = 180
+
 function TeamModal({ member, onClose }) {
   const [visible, setVisible] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+  const isLong = member.bio && member.bio.length > BIO_LIMIT
 
   useEffect(() => {
     requestAnimationFrame(() => setVisible(true))
@@ -39,12 +43,14 @@ function TeamModal({ member, onClose }) {
       <div style={{
         position: 'fixed', inset: 0, zIndex: 1000,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '24px', pointerEvents: 'none',
+        padding: '16px', pointerEvents: 'none',
       }}>
         <div
           onClick={e => e.stopPropagation()}
           style={{
             width: '100%', maxWidth: 640,
+            maxHeight: '88vh',
+            overflowY: 'auto',
             borderRadius: 8,
             background: '#fff',
             pointerEvents: 'auto',
@@ -53,9 +59,6 @@ function TeamModal({ member, onClose }) {
             transition: 'opacity 0.28s ease, transform 0.28s cubic-bezier(0.4,0,0.2,1)',
             boxShadow: '0 8px 40px rgba(13,27,42,0.14)',
             padding: '32px',
-            display: 'flex',
-            gap: 32,
-            alignItems: 'flex-start',
             position: 'relative',
           }}
         >
@@ -65,12 +68,13 @@ function TeamModal({ member, onClose }) {
             aria-label="Fechar"
             style={{
               position: 'absolute', top: 14, right: 14,
-              width: 26, height: 26, borderRadius: '50%',
+              width: 30, height: 30, borderRadius: '50%',
               background: '#EEF2F5', border: 'none',
               cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#9AA5B1', fontSize: 11,
+              color: '#4A5568', fontSize: 13, fontWeight: 600,
               transition: 'background 0.15s',
+              zIndex: 1,
             }}
             onMouseEnter={e => e.currentTarget.style.background = '#D1D9E0'}
             onMouseLeave={e => e.currentTarget.style.background = '#EEF2F5'}
@@ -78,55 +82,112 @@ function TeamModal({ member, onClose }) {
             ✕
           </button>
 
-          {/* LEFT — photo + identity */}
-          <div style={{ flexShrink: 0, width: 200 }}>
-            <div style={{
-              width: 200, height: 200,
-              borderRadius: 4, overflow: 'hidden', background: '#EEF2F5',
-              marginBottom: 14,
-            }}>
-              <img
-                src={member.img}
-                alt={member.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
-              />
-            </div>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 15, fontWeight: 600,
-              color: '#0D1B2A', lineHeight: '22px',
-              marginBottom: 2,
-            }}>
-              {member.name}
-            </p>
-            {member.degree && (
+          {/* body — stacks on mobile */}
+          <div className="modal-body">
+            {/* photo + identity */}
+            <div className="modal-photo-col">
+              <div style={{
+                width: '100%', aspectRatio: '1 / 1',
+                borderRadius: 4, overflow: 'hidden', background: '#EEF2F5',
+                marginBottom: 14,
+              }}>
+                <img
+                  src={member.img}
+                  alt={member.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+                />
+              </div>
               <p style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: 12, color: '#1A7A6E', lineHeight: '18px',
+                fontSize: 15, fontWeight: 600,
+                color: '#0D1B2A', lineHeight: '22px',
                 marginBottom: 2,
               }}>
-                {member.degree}
+                {member.name}
               </p>
-            )}
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 13, color: '#4A5568', lineHeight: '19px',
-            }}>
-              {member.role}
-            </p>
-          </div>
+              {member.degree && (
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 12, color: '#1A7A6E', lineHeight: '18px',
+                  marginBottom: 2,
+                }}>
+                  {member.degree}
+                </p>
+              )}
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 13, color: '#4A5568', lineHeight: '19px',
+              }}>
+                {member.role}
+              </p>
+            </div>
 
-          {/* RIGHT — bio */}
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 14, fontWeight: 400,
-            color: '#4A5568', lineHeight: 1.78,
-            flex: 1, paddingTop: 2,
-          }}>
-            {member.bio}
-          </p>
+            {/* bio */}
+            <div style={{ flex: 1, paddingTop: 2 }}>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 14, fontWeight: 400,
+                color: '#4A5568', lineHeight: 1.78,
+              }}>
+                <span className="bio-text bio-text--full">{member.bio}</span>
+                <span className="bio-text bio-text--short">
+                  {isLong && !expanded
+                    ? member.bio.slice(0, BIO_LIMIT).trimEnd() + '…'
+                    : member.bio}
+                </span>
+              </p>
+              {isLong && (
+                <button
+                  className="bio-toggle"
+                  onClick={() => setExpanded(e => !e)}
+                  style={{
+                    marginTop: 10,
+                    background: 'none', border: 'none', padding: 0,
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 13, fontWeight: 500,
+                    color: '#1A7A6E', cursor: 'pointer',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: 2,
+                  }}
+                >
+                  {expanded ? 'Ler menos' : 'Ler mais'}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
+
+      <style>{`
+        .modal-body {
+          display: flex;
+          gap: 32px;
+          align-items: flex-start;
+        }
+        .modal-photo-col {
+          flex-shrink: 0;
+          width: 180px;
+        }
+        /* desktop: always show full bio */
+        .bio-text--short { display: none; }
+        .bio-text--full  { display: inline; }
+        .bio-toggle      { display: none; }
+
+        @media (max-width: 560px) {
+          .modal-body {
+            flex-direction: column;
+            gap: 20px;
+          }
+          .modal-photo-col {
+            width: 100%;
+            max-width: 160px;
+          }
+          /* mobile: show short bio + toggle */
+          .bio-text--full  { display: none; }
+          .bio-text--short { display: inline; }
+          .bio-toggle      { display: inline-block; }
+        }
+      `}</style>
     </>
   )
 }
@@ -143,8 +204,9 @@ function TeamCard({ member, onClick }) {
       <div style={{
         width: '100%', aspectRatio: '1 / 1',
         borderRadius: 4, overflow: 'hidden', background: '#C0CBD4',
-        transition: 'opacity 0.2s',
+        transition: 'opacity 0.2s, transform 0.2s',
         opacity: hovered ? 0.85 : 1,
+        transform: hovered ? 'scale(1.02)' : 'scale(1)',
       }}>
         <img
           src={member.img}
@@ -237,9 +299,6 @@ export default function TeamSection() {
           #sobre [style*="1fr 1fr"] { grid-template-columns: 1fr !important; }
           #sobre h2 { text-align: left !important; }
           #sobre [style*="repeat(3"] { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 480px) {
-          #sobre [style*="repeat(3"], #sobre [style*="repeat(2"] { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

@@ -29,7 +29,7 @@ export const HERO = {
 }
 
 export const POSITIONING = {
-  paragraph1: 'Hospitais e centros especializados já acumulam milhares de dados todos os dias.',
+  paragraph1: 'Hospitais e centros especializados já acumulam um grande volume de dados todos os dias.',
   paragraph2: {
     text: 'Mas ainda é um desafio transformar esse volume em ações preventivas e decisões ágeis diante de sistemas fragmentados e pressão para reduzir custos. ',
     emphasis: 'Cuidamos disso.',
@@ -78,7 +78,7 @@ export const TEAM_CONTENT = {
 }
 
 export const PRODUCTS_SECTION = {
-  heading: { before: 'Seja fronteira da ', emphasis: 'IA na saúde', end: '.' },
+  heading: { before: 'Seja da linha de frente da ', emphasis: 'IA na saúde', end: '.' },
 }
 
 export const CTA_CONTENT = {

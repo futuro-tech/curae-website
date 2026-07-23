@@ -66,9 +66,8 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 400, color: '#4A5568', lineHeight: '21px', transition: 'color 0.15s' }}
-              onMouseEnter={e => e.target.style.color = '#0D1B2A'}
-              onMouseLeave={e => e.target.style.color = '#4A5568'}
+              className="nav-link"
+              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 400, color: '#4A5568', lineHeight: '21px' }}
             >
               {link.label}
             </a>
@@ -88,10 +87,18 @@ export default function Navbar() {
               padding: '10px 20px', borderRadius: 4, background: '#0D1B2A',
               color: '#FAFAFA', fontFamily: "'DM Sans', sans-serif",
               fontSize: 15, fontWeight: 500, lineHeight: '22.5px',
-              whiteSpace: 'nowrap', transition: 'background 0.15s',
+              whiteSpace: 'nowrap', transition: 'background 0.15s, transform 0.15s, box-shadow 0.15s',
             }}
-            onMouseEnter={e => e.currentTarget.style.background = '#1a2f45'}
-            onMouseLeave={e => e.currentTarget.style.background = '#0D1B2A'}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = '#1a2f45'
+              e.currentTarget.style.transform = 'scale(1.04)'
+              e.currentTarget.style.boxShadow = '0 6px 16px rgba(13,27,42,0.18)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = '#0D1B2A'
+              e.currentTarget.style.transform = 'scale(1)'
+              e.currentTarget.style.boxShadow = 'none'
+            }}
           >
             {NAV.cta}
           </a>
@@ -151,6 +158,27 @@ export default function Navbar() {
       )}
 
       <style>{`
+        .nav-link {
+          position: relative;
+          transition: color 0.15s;
+        }
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          left: 0; right: 0; bottom: -4px;
+          height: 1px;
+          background: #0D1B2A;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.25s ease;
+        }
+        .nav-link:hover {
+          color: #0D1B2A;
+        }
+        .nav-link:hover::after {
+          transform: scaleX(1);
+        }
+
         @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
           .nav-hamburger { display: flex !important; }

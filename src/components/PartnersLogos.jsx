@@ -7,6 +7,7 @@ export default function PartnersLogos({ partners, gap = 24 }) {
           src={p.src}
           alt={p.name}
           height={p.h}
+          className="partner-logo"
           style={{
             height: p.h,
             width: 'auto',
@@ -17,6 +18,16 @@ export default function PartnersLogos({ partners, gap = 24 }) {
           }}
         />
       ))}
+
+      <style>{`
+        .partner-logo {
+          transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .partner-logo:hover {
+          transform: scale(1.06);
+          opacity: 0.85;
+        }
+      `}</style>
     </div>
   )
 }

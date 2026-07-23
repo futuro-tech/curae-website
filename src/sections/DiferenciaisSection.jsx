@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useLang } from '../context/LangContext'
+import { useReveal } from '../hooks/useReveal'
 
 const ICONS = [
   (
@@ -29,24 +30,66 @@ const ICONS = [
   ),
 ]
 
+function DiferenciaisItem({ item, index }) {
+  const [hovered, setHovered] = useState(false)
+  const reveal = useReveal({ delay: index * 0.08, y: 12 })
+  return (
+    <div
+      ref={reveal.ref}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex', alignItems: 'center', gap: 16,
+        padding: '20px 28px', borderRadius: 6,
+        border: hovered ? '0.5px solid #1A7A6E' : '0.5px solid #D1D9E0',
+        background: '#FFF',
+        transform: hovered ? 'translateY(-2px)' : 'translateY(0)',
+        boxShadow: hovered ? '0 6px 20px rgba(26,122,110,0.10)' : 'none',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+        cursor: 'default',
+        ...reveal.style,
+      }}
+    >
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        width: 36, height: 36, borderRadius: 4,
+        background: hovered ? '#C8EDE7' : '#E1F5EE',
+        flexShrink: 0, transition: 'background 0.2s ease',
+        transform: hovered ? 'scale(1.08)' : 'scale(1)',
+      }}>
+        {item.icon}
+      </div>
+      <div>
+        <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600, color: '#0D1B2A', lineHeight: '19.5px', marginBottom: 4 }}>
+          {item.title}
+        </h3>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 400, color: '#4A5568', lineHeight: '20px' }}>
+          {item.desc}
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export default function DiferenciaisSection() {
   const { t } = useLang()
   const { heading, items } = t.DIFERENCIAIS
   const ITEMS = items.map((item, i) => ({ ...item, icon: ICONS[i] }))
-  const [hoveredIndex, setHoveredIndex] = useState(null)
+  const headingReveal = useReveal()
   return (
     <section style={{ background: '#FAFAFA', padding: 'clamp(64px, 8vw, 100px) var(--section-px)' }}>
       <div style={{
         maxWidth: 'var(--max-content)', margin: '0 auto',
         display: 'grid', gridTemplateColumns: '358px 1fr', gap: 80, alignItems: 'start',
       }}>
-        <h2 style={{
+        <h2 ref={headingReveal.ref} style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: 'clamp(32px, 4vw, 44px)',
           fontWeight: 300,
           fontStyle: 'italic',
           lineHeight: 1.18,
           color: '#0D1B2A',
+          ...headingReveal.style,
         }}>
           {heading.before}
           <span style={{ fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 4 }}>
@@ -57,38 +100,7 @@ export default function DiferenciaisSection() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {ITEMS.map((item, i) => (
-            <div
-              key={item.title}
-              onMouseEnter={() => setHoveredIndex(i)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 16,
-                padding: '20px 28px', borderRadius: 6,
-                border: hoveredIndex === i ? '0.5px solid #1A7A6E' : '0.5px solid #D1D9E0',
-                background: '#FFF',
-                transform: hoveredIndex === i ? 'translateY(-2px)' : 'translateY(0)',
-                boxShadow: hoveredIndex === i ? '0 6px 20px rgba(26,122,110,0.10)' : 'none',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
-                cursor: 'default',
-              }}
-            >
-              <div style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 36, height: 36, borderRadius: 4,
-                background: hoveredIndex === i ? '#C8EDE7' : '#E1F5EE',
-                flexShrink: 0, transition: 'background 0.2s ease',
-              }}>
-                {item.icon}
-              </div>
-              <div>
-                <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600, color: '#0D1B2A', lineHeight: '19.5px', marginBottom: 4 }}>
-                  {item.title}
-                </h3>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 400, color: '#4A5568', lineHeight: '20px' }}>
-                  {item.desc}
-                </p>
-              </div>
-            </div>
+            <DiferenciaisItem key={item.title} item={item} index={i} />
           ))}
         </div>
       </div>

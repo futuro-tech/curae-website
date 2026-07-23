@@ -4,28 +4,36 @@ export const NAV = {
     { label: 'Tecnologia', href: '#tecnologia' },
     { label: 'Time', href: '#sobre' },
   ],
-  cta: 'Fale conosco',
+  cta: 'Agende uma conversa',
 }
 
 export const HERO = {
   headline: {
-    line1: 'Precisão e',
-    line2: 'eficiência na saúde',
-    line3: 'salvam ',
+    line1: 'Eficiência na',
+    line2: 'saúde é ganhar',
     emphasis1: 'tempo',
-    line4: 'De ',
+    middle: '. De ',
     emphasis2: 'vida',
     end: '.',
   },
-  paragraph: 'A Curae pesquisa e desenvolve produtos que assistem à antecipação de diagnósticos complexos e melhoram o fluxo hospitalar.',
+  paragraph: 'Modelos de inteligência preditiva para sistemas de saúde mais fluidos, sustentáveis e capazes de antecipar riscos com precisão.',
   partnersLabel: 'Parceiros',
-  article: {
-    badge: 'Artigo Publicado',
-    source: 'Futuro Tech / Curae • Abril 2026',
-    title: 'Construction of a Classification Model for Dementia Among Brazilian Adults Aged 50 and Over.',
-    cta: 'Ler publicação →',
-    href: 'https://www.frontiersin.org/journals/aging-neuroscience/articles/10.3389/fnagi.2026.1789012/full',
-  },
+  articles: [
+    {
+      badge: 'Artigo Publicado',
+      source: 'Futuro Tech / Curae • Abril 2026',
+      title: 'Construction of a Classification Model for Dementia Among Brazilian Adults Aged 50 and Over.',
+      cta: 'Ler publicação →',
+      href: 'https://www.frontiersin.org/journals/aging-neuroscience/articles/10.3389/fnagi.2026.1789012/full',
+    },
+    {
+      badge: 'Artigo Publicado',
+      source: 'SBCAS • Junho 2026',
+      title: 'Identifying Gambling Risk Profiles from Online Behavioral Data: An AI Cluster-Based Empirical Study.',
+      cta: 'Ler publicação →',
+      href: 'https://sol.sbc.org.br/index.php/sbcas/article/view/42871',
+    },
+  ],
 }
 
 export const POSITIONING = {
@@ -48,7 +56,7 @@ export const BENEFITS = {
 
 export const DIFERENCIAIS = {
   heading: {
-    before: 'Eficiência a partir de ',
+    before: 'Precisão a partir de ',
     emphasis: 'ciência aplicada',
     end: '.',
   },
@@ -75,10 +83,15 @@ export const TEAM_CONTENT = {
     emphasis: 'Curae significa cuidar',
     end: '.',
   },
+  groups: {
+    researchers: 'Pesquisadores e Especialistas em IA',
+    medical: 'Conselho Médico',
+  },
 }
 
 export const PRODUCTS_SECTION = {
-  heading: { before: 'Seja da linha de frente da ', emphasis: 'IA na saúde', end: '.' },
+  heading: { before: 'Resolvemos gargalos ', emphasis: 'para a saúde fluir.', end: '' },
+  subheading: 'Conheça nossos produtos',
 }
 
 export const CTA_CONTENT = {
@@ -88,7 +101,7 @@ export const CTA_CONTENT = {
   },
   description: 'A gente sabe que tempo é tudo. Solicite uma conversa e entraremos em contato o mais breve possível.',
   button: {
-    label: 'Fale com nosso especialista →',
+    label: 'Fale com um especialista →',
     href: 'https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+saber+mais!',
   },
   partnersLabel: 'Parceiros',
@@ -96,7 +109,7 @@ export const CTA_CONTENT = {
 
 export const FOOTER_CONTENT = {
   tagline: 'Uma empresa Futuro Tech',
-  description: 'Pesquisa aplicada e desenvolvimento de soluções de inteligência artificial para predição de risco, operação e decisões clínicas de saúde de alta complexidade.',
+  description: 'Soluções de inteligência artificial para predição de risco, operação e decisões clínicas em saúde de alta complexidade.',
   socials: [],
   sections: {
     products: 'Produtos',

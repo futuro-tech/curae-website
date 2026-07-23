@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PartnersLogos from '../components/PartnersLogos'
 import { PARTNERS_HERO } from '../data/partners'
 import { useLang } from '../context/LangContext'
@@ -7,8 +7,68 @@ const HERO_IMG = 'https://api.builder.io/api/v1/image/assets/TEMP/505760c7436e51
 
 export default function HeroSection() {
   const { t } = useLang()
-  const { headline: h, article } = t.HERO
+  const { headline: h, articles } = t.HERO
   const [articleHovered, setArticleHovered] = useState(false)
+  const [articleIndex, setArticleIndex] = useState(0)
+  const [dragX, setDragX] = useState(0)
+  const [dragging, setDragging] = useState(false)
+  const dragInfo = useRef({ startX: 0, width: 0, moved: false, currentX: 0 })
+  const canDrag = articles.length > 1
+
+  useEffect(() => {
+    setArticleIndex(0)
+  }, [articles])
+
+  useEffect(() => {
+    if (!canDrag || articleHovered || dragging) return
+    const id = setInterval(() => {
+      setArticleIndex(i => (i + 1) % articles.length)
+    }, 3000)
+    return () => clearInterval(id)
+  }, [articles, articleHovered, dragging, canDrag])
+
+  function handlePointerDown(e) {
+    // Use window-level listeners instead of setPointerCapture so a plain
+    // click (no movement) still lets the browser fire a native click on
+    // the anchor underneath — capture would retarget mouseup and swallow it.
+    dragInfo.current.startX = e.clientX
+    dragInfo.current.width = e.currentTarget.offsetWidth || 1
+    dragInfo.current.moved = false
+    dragInfo.current.currentX = 0
+    setDragging(true)
+
+    function onMove(ev) {
+      const delta = ev.clientX - dragInfo.current.startX
+      if (Math.abs(delta) > 6) dragInfo.current.moved = true
+      dragInfo.current.currentX = delta
+      setDragX(delta)
+    }
+
+    function onUp() {
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+      window.removeEventListener('pointercancel', onUp)
+      setDragging(false)
+      const width = dragInfo.current.width || 1
+      const threshold = width * 0.12
+      const finalX = dragInfo.current.currentX
+      if (finalX > threshold) {
+        setArticleIndex(i => (i - 1 + articles.length) % articles.length)
+      } else if (finalX < -threshold) {
+        setArticleIndex(i => (i + 1) % articles.length)
+      }
+      setDragX(0)
+    }
+
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+    window.addEventListener('pointercancel', onUp)
+  }
+
+  function handleArticleLinkClick(e) {
+    if (dragInfo.current.moved) e.preventDefault()
+  }
+
   return (
     <section id="produtos" style={{
       background: '#FAFAFA',
@@ -58,8 +118,7 @@ export default function HeroSection() {
         }}>
           {h.line1}<br />
           {h.line2}<br />
-          {h.line3}<span style={{ fontWeight: 600, fontStyle: 'italic', textDecoration: 'underline', textUnderlineOffset: 4 }}>{h.emphasis1}</span>.<br />
-          {h.line4}<span style={{ fontWeight: 600, fontStyle: 'italic', textDecoration: 'underline', textUnderlineOffset: 4 }}>{h.emphasis2}</span>{h.end}
+          <span style={{ fontWeight: 600, fontStyle: 'italic', textDecoration: 'underline', textUnderlineOffset: 4 }}>{h.emphasis1}</span>{h.middle}<span style={{ fontWeight: 600, fontStyle: 'italic', textDecoration: 'underline', textUnderlineOffset: 4 }}>{h.emphasis2}</span>{h.end}
         </h1>
 
         <p style={{
@@ -103,101 +162,134 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Article bar */}
-      <a
-        href={article.href}
-        target="_blank"
-        rel="noopener noreferrer"
+      {/* Article bar (draggable carousel) */}
+      <div
         onMouseEnter={() => setArticleHovered(true)}
         onMouseLeave={() => setArticleHovered(false)}
+        onPointerDown={canDrag ? handlePointerDown : undefined}
         className="article-bar"
         style={{
-          display: 'block',
           background: articleHovered ? '#162435' : '#0D1B2A',
-          padding: '14px var(--section-px)',
+          padding: '14px 0',
           transition: 'background 0.2s ease',
-          textDecoration: 'none',
           borderTop: articleHovered ? '0.5px solid rgba(94,204,195,0.25)' : '0.5px solid transparent',
+          overflow: 'hidden',
+          touchAction: 'pan-y',
+          cursor: canDrag ? (dragging ? 'grabbing' : 'grab') : 'default',
+          userSelect: dragging ? 'none' : 'auto',
         }}
       >
-        {/* Desktop layout */}
-        <div className="article-bar__desktop" style={{
-          maxWidth: 1244,
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 16,
-        }}>
-          <span style={{
-            display: 'inline-flex', alignItems: 'center',
-            padding: '4px 8px', borderRadius: 2,
-            background: '#E1F5EE',
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 10, fontWeight: 500, color: '#1A7A6E',
-            letterSpacing: '0.8px', textTransform: 'uppercase', flexShrink: 0,
-          }}>
-            {article.badge}
-          </span>
-          <span style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-            color: 'rgba(255,255,255,0.35)', flexShrink: 0,
-          }}>
-            {article.source}
-          </span>
-          <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.15)', flexShrink: 0 }} />
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-            color: 'rgba(255,255,255,0.60)', lineHeight: '19.5px', flex: 1,
-          }}>
-            {article.title}
-          </p>
-          <span style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
-            color: articleHovered ? '#5ECCC3' : '#FAFAFA',
-            opacity: articleHovered ? 1 : 0.85, whiteSpace: 'nowrap',
-            transition: 'color 0.2s ease, opacity 0.2s ease',
-          }}>
-            {article.cta}
-          </span>
-        </div>
+        <div
+          style={{
+            display: 'flex',
+            width: `${articles.length * 100}%`,
+            transform: `translateX(calc(${-articleIndex * (100 / articles.length)}% + ${dragX}px))`,
+            transition: dragging ? 'none' : 'transform 0.3s cubic-bezier(0.22,1,0.36,1)',
+          }}
+        >
+          {articles.map(a => (
+            <div key={a.href} style={{ flex: `0 0 ${100 / articles.length}%`, minWidth: 0 }}>
+              {/* Desktop layout */}
+              <div className="article-bar__desktop" style={{
+                maxWidth: 1244,
+                margin: '0 auto',
+                padding: '0 var(--section-px)',
+              }}>
+                <a
+                  href={a.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  draggable={false}
+                  onClick={handleArticleLinkClick}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 16,
+                    textDecoration: 'none',
+                  }}
+                >
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center',
+                    padding: '4px 8px', borderRadius: 2,
+                    background: '#E1F5EE',
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 10, fontWeight: 500, color: '#1A7A6E',
+                    letterSpacing: '0.8px', textTransform: 'uppercase', flexShrink: 0,
+                  }}>
+                    {a.badge}
+                  </span>
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+                    color: 'rgba(255,255,255,0.35)', flexShrink: 0,
+                  }}>
+                    {a.source}
+                  </span>
+                  <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.15)', flexShrink: 0 }} />
+                  <p style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                    color: 'rgba(255,255,255,0.60)', lineHeight: '19.5px', flex: 1, minWidth: 0,
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>
+                    {a.title}
+                  </p>
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
+                    color: articleHovered ? '#5ECCC3' : '#FAFAFA',
+                    opacity: articleHovered ? 1 : 0.85, whiteSpace: 'nowrap', flexShrink: 0,
+                    transition: 'color 0.2s ease, opacity 0.2s ease',
+                  }}>
+                    {a.cta}
+                  </span>
+                </a>
+              </div>
 
-        {/* Mobile layout */}
-        <div className="article-bar__mobile" style={{ maxWidth: 1244, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-            <span style={{
-              display: 'inline-flex', alignItems: 'center',
-              padding: '3px 7px', borderRadius: 2, background: '#E1F5EE',
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 9, fontWeight: 500, color: '#1A7A6E',
-              letterSpacing: '0.7px', textTransform: 'uppercase', flexShrink: 0,
-            }}>
-              {article.badge}
-            </span>
-            <span style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-              color: 'rgba(255,255,255,0.35)',
-            }}>
-              {article.source}
-            </span>
-          </div>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-            color: 'rgba(255,255,255,0.65)', lineHeight: 1.5, marginBottom: 10,
-          }}>
-            {article.title}
-          </p>
-          <span style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
-            color: '#5ECCC3',
-          }}>
-            {article.cta}
-          </span>
+              {/* Mobile layout */}
+              <div className="article-bar__mobile" style={{ maxWidth: 1244, margin: '0 auto', padding: '0 var(--section-px)' }}>
+                <a
+                  href={a.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  draggable={false}
+                  onClick={handleArticleLinkClick}
+                  style={{ textDecoration: 'none', display: 'block' }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center',
+                      padding: '3px 7px', borderRadius: 2, background: '#E1F5EE',
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 9, fontWeight: 500, color: '#1A7A6E',
+                      letterSpacing: '0.7px', textTransform: 'uppercase', flexShrink: 0,
+                    }}>
+                      {a.badge}
+                    </span>
+                    <span style={{
+                      fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+                      color: 'rgba(255,255,255,0.35)',
+                    }}>
+                      {a.source}
+                    </span>
+                  </div>
+                  <p style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                    color: 'rgba(255,255,255,0.65)', lineHeight: 1.5, marginBottom: 10,
+                  }}>
+                    {a.title}
+                  </p>
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
+                    color: '#5ECCC3',
+                  }}>
+                    {a.cta}
+                  </span>
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
-      </a>
+      </div>
 
       <style>{`
         .article-bar__mobile { display: none; }
-        .article-bar__desktop { display: flex; }
+        .article-bar__desktop { display: block; }
 
         @media (max-width: 768px) {
           #produtos > div[style*="grid"] {
@@ -209,7 +301,7 @@ export default function HeroSection() {
           }
           .article-bar__desktop { display: none !important; }
           .article-bar__mobile  { display: block !important; }
-          .article-bar { padding: 16px var(--section-px) !important; }
+          .article-bar { padding: 16px 0 !important; }
         }
       `}</style>
     </section>

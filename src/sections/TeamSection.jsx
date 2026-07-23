@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLang } from '../context/LangContext'
+import { useReveal } from '../hooks/useReveal'
 
 const BIO_LIMIT = 180
 
@@ -87,14 +88,16 @@ function TeamModal({ member, onClose, lang }) {
             <div className="modal-photo-col">
               <div style={{
                 width: '100%', aspectRatio: '1 / 1',
-                borderRadius: 4, overflow: 'hidden', background: '#EEF2F5',
+                borderRadius: 4, overflow: 'hidden', background: '#C0CBD4',
                 marginBottom: 14,
               }}>
-                <img
-                  src={member.img}
-                  alt={member.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
-                />
+                {member.img && (
+                  <img
+                    src={member.img}
+                    alt={member.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+                  />
+                )}
               </div>
               <p style={{
                 fontFamily: "'DM Sans', sans-serif",
@@ -113,12 +116,14 @@ function TeamModal({ member, onClose, lang }) {
                   {member.degree}
                 </p>
               )}
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 13, color: '#4A5568', lineHeight: '19px',
-              }}>
-                {member.role}
-              </p>
+              {member.role && (
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 13, color: '#4A5568', lineHeight: '19px',
+                }}>
+                  {member.role}
+                </p>
+              )}
             </div>
 
             {/* bio */}
@@ -193,14 +198,17 @@ function TeamModal({ member, onClose, lang }) {
   )
 }
 
-function TeamCard({ member, onClick }) {
+function TeamCard({ member, onClick, index = 0 }) {
   const [hovered, setHovered] = useState(false)
+  const clickable = Boolean(member.bio)
+  const reveal = useReveal({ delay: (index % 4) * 0.06, y: 14 })
   return (
     <div
-      onClick={() => onClick(member)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
+      ref={reveal.ref}
+      onClick={clickable ? () => onClick(member) : undefined}
+      onMouseEnter={() => clickable && setHovered(true)}
+      onMouseLeave={() => clickable && setHovered(false)}
+      style={{ display: 'flex', flexDirection: 'column', cursor: clickable ? 'pointer' : 'default', ...reveal.style }}
     >
       <div style={{
         width: '100%', aspectRatio: '1 / 1',
@@ -209,11 +217,13 @@ function TeamCard({ member, onClick }) {
         opacity: hovered ? 0.85 : 1,
         transform: hovered ? 'scale(1.02)' : 'scale(1)',
       }}>
-        <img
-          src={member.img}
-          alt={member.name}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
-        />
+        {member.img && (
+          <img
+            src={member.img}
+            alt={member.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+          />
+        )}
       </div>
       <div style={{ paddingTop: 14 }}>
         <p style={{
@@ -232,22 +242,40 @@ function TeamCard({ member, onClick }) {
             {member.degree}
           </p>
         )}
-        <p style={{
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: 13, fontWeight: 400,
-          color: '#4A5568', lineHeight: '19.5px', marginTop: 2,
-        }}>
-          {member.role}
-        </p>
+        {member.role && (
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 13, fontWeight: 400,
+            color: '#4A5568', lineHeight: '19.5px', marginTop: 2,
+          }}>
+            {member.role}
+          </p>
+        )}
       </div>
     </div>
   )
 }
 
+const FOUNDER_ORDER = ['Adriana Falcão', 'João Garcia', 'Elliot Garcia']
+
 export default function TeamSection() {
   const { t, lang } = useLang()
-  const { tagline, heading } = t.TEAM_CONTENT
+  const { tagline, heading, groups } = t.TEAM_CONTENT
   const [selected, setSelected] = useState(null)
+
+  const founders = t.TEAM
+    .filter(m => m.group === 'founders')
+    .sort((a, b) => FOUNDER_ORDER.indexOf(a.name) - FOUNDER_ORDER.indexOf(b.name))
+  const researchers = t.TEAM
+    .filter(m => m.group === 'researchers')
+    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+  const medical = t.TEAM
+    .filter(m => m.group === 'medical')
+    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+
+  const researchersLabel = groups?.researchers ?? 'Pesquisadores e Especialistas em IA'
+  const medicalLabel = groups?.medical ?? 'Conselho Médico'
+  const introReveal = useReveal()
 
   return (
     <section id="sobre" style={{
@@ -256,12 +284,13 @@ export default function TeamSection() {
     }}>
       <div style={{ maxWidth: 'var(--max-content)', margin: '0 auto' }}>
 
-        <div style={{
+        <div ref={introReveal.ref} style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: 40,
           marginBottom: 56,
           alignItems: 'start',
+          ...introReveal.style,
         }}>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -282,15 +311,59 @@ export default function TeamSection() {
           </h2>
         </div>
 
-        <div style={{
+        <div className="team-grid" style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
           gap: '48px 24px',
         }}>
-          {t.TEAM.map(m => (
-            <TeamCard key={m.name} member={m} onClick={setSelected} />
+          {founders.map((m, i) => (
+            <TeamCard key={m.name} member={m} onClick={setSelected} index={i} />
           ))}
         </div>
+
+        {researchers.length > 0 && (
+          <>
+            <h3 style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 18, fontWeight: 600,
+              color: '#0D1B2A',
+              marginTop: 64, marginBottom: 28,
+            }}>
+              {researchersLabel}
+            </h3>
+            <div className="team-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+              gap: '48px 24px',
+            }}>
+              {researchers.map((m, i) => (
+                <TeamCard key={m.name} member={m} onClick={setSelected} index={i} />
+              ))}
+            </div>
+          </>
+        )}
+
+        {medical.length > 0 && (
+          <>
+            <h3 style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 18, fontWeight: 600,
+              color: '#0D1B2A',
+              marginTop: 64, marginBottom: 28,
+            }}>
+              {medicalLabel}
+            </h3>
+            <div className="team-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+              gap: '48px 24px',
+            }}>
+              {medical.map((m, i) => (
+                <TeamCard key={m.name} member={m} onClick={setSelected} index={i} />
+              ))}
+            </div>
+          </>
+        )}
 
       </div>
 
@@ -300,7 +373,7 @@ export default function TeamSection() {
         @media (max-width: 768px) {
           #sobre [style*="1fr 1fr"] { grid-template-columns: 1fr !important; }
           #sobre h2 { text-align: left !important; }
-          #sobre [style*="repeat(3"] { grid-template-columns: repeat(2, 1fr) !important; }
+          #sobre .team-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
       `}</style>
     </section>

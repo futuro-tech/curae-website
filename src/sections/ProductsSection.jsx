@@ -1,59 +1,83 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { useLang } from '../context/LangContext'
+import { PRODUCT_GROUPS_PT, PRODUCT_GROUPS_EN } from '../data/productGroups'
+import { useReveal } from '../hooks/useReveal'
 
-function ContentPanel({ t, borderTop }) {
+function BenefitCapsule({ icon, text, bg }) {
+  const [hovered, setHovered] = useState(false)
   return (
-    <div style={{
-      padding: 'clamp(32px, 5vw, 56px) clamp(24px, 5vw, 56px)',
-      borderRadius: borderTop ? '0 0 8px 8px' : 8,
-      border: '0.5px solid #D1D9E0',
-      borderTop: borderTop ? 'none' : '0.5px solid #D1D9E0',
-      background: '#FFF',
-    }}>
-      <div style={{ marginBottom: 24 }}>
-        <span style={{
-          display: 'inline-flex', padding: '5px 12px', borderRadius: 2,
-          background: '#E1F5EE',
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: 11, fontWeight: 500,
-          color: '#1A7A6E', letterSpacing: '0.8px', textTransform: 'uppercase',
-        }}>
-          {t.category}
-        </span>
-      </div>
-
-      <h3 style={{
-        fontFamily: "'Cormorant Garamond', serif",
-        fontSize: 'clamp(26px, 3.5vw, 40px)',
-        fontStyle: 'italic', fontWeight: 400,
-        lineHeight: 1.2, color: '#0D1B2A',
-        maxWidth: 640, marginBottom: 20,
-      }}>
-        {t.heading}
-      </h3>
-
-      <p style={{
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex', alignItems: 'flex-start', gap: 16,
+        padding: 12, borderRadius: 6, background: bg,
+        width: '100%', maxWidth: 300,
+        transform: hovered ? 'translateY(-2px)' : 'translateY(0)',
+        boxShadow: hovered ? '0 6px 16px rgba(13,27,42,0.08)' : 'none',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+      }}
+    >
+      <img src={icon} alt="" style={{
+        width: 27, height: 27, flexShrink: 0,
+        transform: hovered ? 'scale(1.1)' : 'scale(1)',
+        transition: 'transform 0.2s ease',
+      }} />
+      <span style={{
         fontFamily: "'DM Sans', sans-serif",
-        fontSize: 15, fontWeight: 400,
-        lineHeight: 1.7, color: '#4A5568',
-        maxWidth: 620, marginBottom: 28,
+        fontSize: 15, fontWeight: 300, lineHeight: 1.7,
+        color: '#4A5568',
       }}>
-        {t.description}
-      </p>
+        {text}
+      </span>
+    </div>
+  )
+}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {t.bullets.map(b => (
-          <div key={b} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-            <span style={{
-              width: 6, height: 6, borderRadius: '50%',
-              background: '#1A7A6E', flexShrink: 0, marginTop: 8,
-            }} />
-            <span style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 14, color: '#4A5568', lineHeight: 1.6,
-            }}>
-              {b}
-            </span>
+function ProductRow({ product, group }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: '1 1 300px', minWidth: 260, maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, color: '#000' }}>
+          {product.name}
+        </h3>
+        <h4 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 400, lineHeight: 1.15, color: '#000' }}>
+          {product.heading}
+        </h4>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15.5, lineHeight: 1.6, color: '#4A5568', maxWidth: 330 }}>
+          {product.description}
+        </p>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-end', flex: '0 0 auto', width: '100%', maxWidth: 300 }}>
+        {product.benefits.map(b => (
+          <BenefitCapsule key={b.text} icon={b.icon} text={b.text} bg={group.bg} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ProductGroupCard({ group, index }) {
+  const reveal = useReveal({ delay: index * 0.08 })
+  return (
+    <div ref={reveal.ref} style={{
+      border: '0.5px solid #D1D9E0', borderRadius: 8, background: '#FFF',
+      padding: 'clamp(24px, 4vw, 36px) clamp(20px, 4vw, 40px)',
+      ...reveal.style,
+    }}>
+      <span style={{
+        display: 'inline-flex', padding: '4px 10px', borderRadius: 2,
+        background: group.bg, color: group.text,
+        fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500,
+        letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 24,
+      }}>
+        {group.badge}
+      </span>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+        {group.products.map((p, i) => (
+          <div key={p.id}>
+            {i > 0 && <div style={{ height: 1, background: '#C0CBD4', opacity: 0.4, marginBottom: 32 }} />}
+            <ProductRow product={p} group={group} />
           </div>
         ))}
       </div>
@@ -62,49 +86,10 @@ function ContentPanel({ t, borderTop }) {
 }
 
 export default function ProductsSection() {
-  const { t } = useLang()
-  const PRODUCTS = t.PRODUCTS
-  const { heading } = t.PRODUCTS_SECTION
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [hoveredIndex, setHoveredIndex] = useState(null)
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 900)
-  const itemRefs = useRef([])
-
-  useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash
-      const match = hash.replace('#produto-', '')
-      const idx = PRODUCTS.findIndex(p => p.id === match)
-      if (idx !== -1) setActiveIndex(idx)
-    }
-    handleHash()
-    window.addEventListener('hashchange', handleHash)
-    return () => window.removeEventListener('hashchange', handleHash)
-  }, [])
-
-  useEffect(() => {
-    const handle = () => setIsMobile(window.innerWidth <= 900)
-    window.addEventListener('resize', handle)
-    return () => window.removeEventListener('resize', handle)
-  }, [])
-
-  function selectProduct(i) {
-    setActiveIndex(i)
-    window.history.replaceState(null, '', `#produto-${PRODUCTS[i].id}`)
-  }
-
-  function handleMobileClick(i) {
-    const next = i === activeIndex ? -1 : i
-    setActiveIndex(next)
-    if (next !== -1) {
-      window.history.replaceState(null, '', `#produto-${PRODUCTS[next].id}`)
-      setTimeout(() => {
-        itemRefs.current[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-      }, 50)
-    }
-  }
-
-  const tab = PRODUCTS[activeIndex] ?? PRODUCTS[0]
+  const { t, lang } = useLang()
+  const { heading, subheading } = t.PRODUCTS_SECTION
+  const groups = lang === 'pt' ? PRODUCT_GROUPS_PT : PRODUCT_GROUPS_EN
+  const headingReveal = useReveal()
 
   return (
     <section id="produtos-section" style={{
@@ -112,144 +97,30 @@ export default function ProductsSection() {
       padding: 'clamp(72px, 10vw, 120px) var(--section-px)',
     }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div ref={headingReveal.ref} style={{ textAlign: 'center', marginBottom: 56, ...headingReveal.style }}>
+          <h2 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: 'clamp(30px, 4.5vw, 42px)',
+            lineHeight: 1.2,
+            color: '#0D1B2A',
+          }}>
+            <span style={{ fontWeight: 300 }}>{heading.before}</span>
+            <span style={{ fontWeight: 700 }}>{heading.emphasis}</span>
+            {heading.end}
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 18, fontWeight: 400, color: '#4A5568', marginTop: 16,
+          }}>
+            {subheading}
+          </p>
+        </div>
 
-        <h2 style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 'clamp(34px, 5vw, 54px)',
-          fontWeight: 300,
-          color: '#0D1B2A',
-          textAlign: 'center',
-          marginBottom: 56,
-          lineHeight: 1.15,
-        }}>
-          {heading.before}
-          <span style={{ fontWeight: 600, textDecoration: 'underline' }}>{heading.emphasis}</span>
-          {heading.end}
-        </h2>
-
-        {isMobile ? (
-          /* ── Mobile: accordion ── */
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {PRODUCTS.map((t, i) => {
-              const isActive = i === activeIndex
-              return (
-                <div key={t.id} ref={el => itemRefs.current[i] = el}>
-                  <button
-                    onClick={() => handleMobileClick(i)}
-                    style={{
-                      width: '100%',
-                      display: 'flex', alignItems: 'center', gap: 12,
-                      padding: '18px 20px',
-                      borderRadius: isActive ? '8px 8px 0 0' : 8,
-                      border: '0.5px solid #D1D9E0',
-                      background: isActive ? '#F4F7F9' : '#FFF',
-                      boxShadow: isActive ? 'inset 0 -3px 0 0 #1A7A6E' : 'none',
-                      cursor: 'pointer', textAlign: 'left',
-                      transition: 'background 0.18s, box-shadow 0.18s',
-                    }}
-                  >
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                        <span style={{
-                          fontFamily: "'DM Sans', sans-serif",
-                          fontSize: 14, fontWeight: 600,
-                          color: isActive ? '#0D1B2A' : '#4A5568',
-                          flex: 1, textAlign: 'left',
-                        }}>
-                          {t.name}
-                        </span>
-                        <span style={{ flexShrink: 0 }}>{t.icon}</span>
-                      </div>
-                      <span style={{
-                        display: 'inline-flex', padding: '3px 8px', borderRadius: 2,
-                        background: isActive ? '#E1F5EE' : '#EEF2F5',
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: 11, fontWeight: 500,
-                        color: isActive ? '#1A7A6E' : '#4A5568',
-                        lineHeight: '17px',
-                        transition: 'background 0.18s, color 0.18s',
-                      }}>
-                        {t.badge}
-                      </span>
-                    </div>
-                    <span style={{
-                      fontSize: 14, color: '#9AA5B1', flexShrink: 0,
-                      transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.22s ease',
-                    }}>▾</span>
-                  </button>
-                  {isActive && <ContentPanel t={t} borderTop={false} />}
-                </div>
-              )
-            })}
-          </div>
-        ) : (
-          /* ── Desktop: tab bar + content panel ── */
-          <>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
-              borderRadius: '8px 8px 0 0',
-              border: '0.5px solid #D1D9E0',
-              background: '#FFF',
-              overflow: 'hidden',
-            }}>
-              {PRODUCTS.map((t, i) => {
-                const isActive = i === activeIndex
-                const isHovered = hoveredIndex === i && !isActive
-                return (
-                  <button
-                    key={t.id}
-                    onClick={() => selectProduct(i)}
-                    onMouseEnter={() => setHoveredIndex(i)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                    style={{
-                      display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
-                      padding: '24px 20px',
-                      borderRight: i < PRODUCTS.length - 1 ? '0.5px solid #D1D9E0' : 'none',
-                      background: isActive ? '#F4F7F9' : isHovered ? '#F9FAFB' : 'transparent',
-                      boxShadow: isActive
-                        ? 'inset 0 -3px 0 0 #1A7A6E'
-                        : isHovered
-                        ? 'inset 0 -3px 0 0 rgba(26,122,110,0.25)'
-                        : 'none',
-                      cursor: 'pointer', textAlign: 'left', gap: 10,
-                      transition: 'background 0.18s, box-shadow 0.18s',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6, width: '100%' }}>
-                      <span style={{
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: 14, fontWeight: 600,
-                        lineHeight: 1.35,
-                        color: isActive ? '#0D1B2A' : isHovered ? '#1A7A6E' : '#4A5568',
-                        flex: 1,
-                        transition: 'color 0.18s',
-                      }}>
-                        {t.name}
-                      </span>
-                      <span style={{ flexShrink: 0, marginTop: 2 }}>{t.icon}</span>
-                    </div>
-                    <span style={{
-                      display: 'inline-flex', padding: '3px 8px', borderRadius: 2,
-                      background: isActive ? '#E1F5EE' : isHovered ? '#E8F7F4' : '#EEF2F5',
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 11, fontWeight: 500,
-                      color: isActive ? '#1A7A6E' : isHovered ? '#1A7A6E' : '#4A5568',
-                      lineHeight: '17px', whiteSpace: 'nowrap',
-                      transition: 'background 0.18s, color 0.18s',
-                    }}>
-                      {t.badge}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-
-            <ContentPanel t={tab} borderTop />
-          </>
-        )}
-
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          {groups.map((group, i) => (
+            <ProductGroupCard key={group.id} group={group} index={i} />
+          ))}
+        </div>
       </div>
     </section>
   )

@@ -12,15 +12,15 @@ export const TEAM = [
   {
     name: 'Elliot Garcia',
     degree: 'MSc em Ciência da Computação Aplicada',
-    role: 'Sócio e pesquisador',
-    group: 'founders',
+    role: '',
+    group: 'researchers',
     img: `${BASE}/abec2a41efcf8678af02ed2f381e7974b7cb93c2?width=582`,
-    bio: 'Cientista de Dados e pesquisador, atua como sócio da FuturoTech onde lidera o desenvolvimento de soluções em machine learning, biomarcadores vocais, visão computacional e redes neurais aplicadas à saúde. Mestre em Informática Aplicada pela UFRPE (PPGIA), com pesquisa voltada à identificação de locutor por aprendizado de máquina, e atualmente doutorando em Biometria e Estatística Aplicada na mesma instituição (PPGBEA), aprofundando a aplicação de biomarcadores vocais e inteligência artificial a problemas clínicos. Alia mais de quatro anos de prática aplicada a rigor acadêmico contínuo, com atuação focada no avanço da saúde por meio da inteligência artificial.',
+    bio: 'Cientista de Dados e pesquisador, atua na FuturoTech onde lidera o desenvolvimento de soluções em machine learning, biomarcadores vocais, visão computacional e redes neurais aplicadas à saúde. Mestre em Informática Aplicada pela UFRPE (PPGIA), com pesquisa voltada à identificação de locutor por aprendizado de máquina, e atualmente doutorando em Biometria e Estatística Aplicada na mesma instituição (PPGBEA), aprofundando a aplicação de biomarcadores vocais e inteligência artificial a problemas clínicos. Alia mais de quatro anos de prática aplicada a rigor acadêmico contínuo, com atuação focada no avanço da saúde por meio da inteligência artificial.',
   },
   {
     name: 'João Garcia',
     degree: 'PhD em Física',
-    role: 'Chief of Science',
+    role: 'Chief Scientific Officer',
     group: 'founders',
     img: `${BASE}/30335f77d12fcaecc3f6122a0ade93c72b59fa83?width=582`,
     bio: 'Doutor em Física pela Universiteit Antwerpen (1998), mestre em Física pela Universidade Federal de Pernambuco (1992) com foco em Sistemas Complexos. Possui mais de 30 anos de experiência no mercado financeiro, incluindo 10 anos dedicados ao gerenciamento de risco de grandes portfólios de securitização e derivativos de crédito, além de 5 anos atuando no desenvolvimento de estratégias para trading e investimentos em mesa proprietária. Ao longo da carreira, acumulou ampla experiência na aplicação de métodos quantitativos em finanças. Graduou-se em Engenharia Eletrônica pelo Instituto Tecnológico de Aeronáutica (ITA) em 1989.',
@@ -59,7 +59,7 @@ export const TEAM = [
   },
   {
     name: 'Tiago Ferreira',
-    degree: 'PhD em Ciência da Computação; PhD em Física',
+    degree: ['PhD em Ciência da Computação', 'PhD em Física'],
     role: '',
     group: 'researchers',
     img: '/team/tiago-ferreira.png',

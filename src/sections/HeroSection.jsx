@@ -5,10 +5,25 @@ import { useLang } from '../context/LangContext'
 
 const HERO_IMG = 'https://api.builder.io/api/v1/image/assets/TEMP/505760c7436e51894b22ecc5f5665f883830b103?width=2976'
 
+function ChevronIcon({ direction }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <path
+        d={direction === 'left' ? 'M15 18l-6-6 6-6' : 'M9 18l6-6-6-6'}
+        stroke="#FFFFFF"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 export default function HeroSection() {
   const { t } = useLang()
   const { headline: h, articles } = t.HERO
   const [articleHovered, setArticleHovered] = useState(false)
+  const [hoveredArrow, setHoveredArrow] = useState(null)
   const [articleIndex, setArticleIndex] = useState(0)
   const [dragX, setDragX] = useState(0)
   const [dragging, setDragging] = useState(false)
@@ -169,6 +184,7 @@ export default function HeroSection() {
         onPointerDown={canDrag ? handlePointerDown : undefined}
         className="article-bar"
         style={{
+          position: 'relative',
           background: articleHovered ? '#162435' : '#0D1B2A',
           padding: '14px 0',
           transition: 'background 0.2s ease',
@@ -285,6 +301,45 @@ export default function HeroSection() {
             </div>
           ))}
         </div>
+
+        {canDrag && (
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+            <div style={{ maxWidth: 1244, height: '100%', margin: '0 auto', padding: '0 var(--section-px)', position: 'relative' }}>
+              <button
+                aria-label="Artigo anterior"
+                onPointerDown={e => e.stopPropagation()}
+                onClick={() => setArticleIndex(i => (i - 1 + articles.length) % articles.length)}
+                onMouseEnter={() => setHoveredArrow('left')}
+                onMouseLeave={() => setHoveredArrow(null)}
+                style={{
+                  position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)',
+                  pointerEvents: 'auto', background: 'none', border: 'none', cursor: 'pointer',
+                  padding: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  opacity: hoveredArrow === 'left' ? 1 : (articleHovered ? 0.55 : 0.3),
+                  transition: 'opacity 0.2s ease',
+                }}
+              >
+                <ChevronIcon direction="left" />
+              </button>
+              <button
+                aria-label="Próximo artigo"
+                onPointerDown={e => e.stopPropagation()}
+                onClick={() => setArticleIndex(i => (i + 1) % articles.length)}
+                onMouseEnter={() => setHoveredArrow('right')}
+                onMouseLeave={() => setHoveredArrow(null)}
+                style={{
+                  position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)',
+                  pointerEvents: 'auto', background: 'none', border: 'none', cursor: 'pointer',
+                  padding: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  opacity: hoveredArrow === 'right' ? 1 : (articleHovered ? 0.55 : 0.3),
+                  transition: 'opacity 0.2s ease',
+                }}
+              >
+                <ChevronIcon direction="right" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <style>{`

@@ -23,6 +23,15 @@ function LangToggle({ lang, setLang, dark }) {
   )
 }
 
+const BASE_URL = import.meta.env.BASE_URL
+const isHome = window.location.pathname === BASE_URL || window.location.pathname === BASE_URL.replace(/\/$/, '')
+
+function resolveHref(href) {
+  if (href.startsWith('#')) return isHome ? href : BASE_URL + href
+  if (href.startsWith('/')) return BASE_URL + href.slice(1)
+  return href
+}
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -57,7 +66,7 @@ export default function Navbar() {
         alignItems: 'center',
         justifyContent: 'space-between',
       }}>
-        <a href="/" aria-label="Curae">
+        <a href={BASE_URL} aria-label="Curae">
           <CuraeLogo variant="dark" />
         </a>
 
@@ -65,7 +74,7 @@ export default function Navbar() {
           {NAV.links.map(link => (
             <a
               key={link.label}
-              href={link.href.startsWith('#') && window.location.pathname !== '/' ? '/' + link.href : link.href}
+              href={resolveHref(link.href)}
               className="nav-link"
               style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 400, color: '#4A5568', lineHeight: '21px' }}
             >
@@ -133,7 +142,7 @@ export default function Navbar() {
           display: 'flex', flexDirection: 'column', gap: 20,
         }}>
           {NAV.links.map(link => (
-            <a key={link.label} href={link.href.startsWith('#') && window.location.pathname !== '/' ? '/' + link.href : link.href}
+            <a key={link.label} href={resolveHref(link.href)}
               onClick={() => setMenuOpen(false)}
               style={{ fontSize: 16, color: '#4A5568', fontWeight: 400 }}>
               {link.label}

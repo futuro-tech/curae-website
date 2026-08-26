@@ -10,7 +10,8 @@ import CTASection from './sections/CTASection'
 import CareersPage from './pages/CareersPage'
 
 export default function App() {
-  const isCareers = window.location.pathname.replace(/\/+$/, '') === '/carreiras'
+  const careersPath = (import.meta.env.BASE_URL + 'carreiras').replace(/\/+/g, '/')
+  const isCareers = window.location.pathname.replace(/\/+$/, '') === careersPath.replace(/\/+$/, '')
 
   if (isCareers) {
     return (

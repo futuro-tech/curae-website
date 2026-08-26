@@ -65,7 +65,7 @@ export default function Navbar() {
           {NAV.links.map(link => (
             <a
               key={link.label}
-              href={link.href}
+              href={link.href.startsWith('#') && window.location.pathname !== '/' ? '/' + link.href : link.href}
               className="nav-link"
               style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 400, color: '#4A5568', lineHeight: '21px' }}
             >
@@ -133,7 +133,7 @@ export default function Navbar() {
           display: 'flex', flexDirection: 'column', gap: 20,
         }}>
           {NAV.links.map(link => (
-            <a key={link.label} href={link.href}
+            <a key={link.label} href={link.href.startsWith('#') && window.location.pathname !== '/' ? '/' + link.href : link.href}
               onClick={() => setMenuOpen(false)}
               style={{ fontSize: 16, color: '#4A5568', fontWeight: 400 }}>
               {link.label}

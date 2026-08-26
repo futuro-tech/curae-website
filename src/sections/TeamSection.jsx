@@ -107,15 +107,15 @@ function TeamModal({ member, onClose, lang }) {
               }}>
                 {member.name}
               </p>
-              {member.degree && (
-                <p style={{
+              {member.degree && [].concat(member.degree).map((d, i) => (
+                <p key={i} style={{
                   fontFamily: "'DM Sans', sans-serif",
                   fontSize: 12, color: '#1A7A6E', lineHeight: '18px',
                   marginBottom: 2,
                 }}>
-                  {member.degree}
+                  {d}
                 </p>
-              )}
+              ))}
               {member.role && (
                 <p style={{
                   fontFamily: "'DM Sans', sans-serif",
@@ -233,15 +233,15 @@ function TeamCard({ member, onClick, index = 0 }) {
         }}>
           {member.name}
         </p>
-        {member.degree && (
-          <p style={{
+        {member.degree && [].concat(member.degree).map((d, i) => (
+          <p key={i} style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: 12, fontWeight: 400,
             color: '#1A7A6E', lineHeight: '18px', marginTop: 2,
           }}>
-            {member.degree}
+            {d}
           </p>
-        )}
+        ))}
         {member.role && (
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -256,7 +256,14 @@ function TeamCard({ member, onClick, index = 0 }) {
   )
 }
 
-const FOUNDER_ORDER = ['Adriana Falcão', 'João Garcia', 'Elliot Garcia']
+const FOUNDER_ORDER = ['Adriana Falcão', 'João Garcia']
+
+function degreeRank(degree = '') {
+  const text = [].concat(degree).join(' ')
+  if (text.includes('PhD')) return 0
+  if (text.includes('MSc')) return 1
+  return 2
+}
 
 export default function TeamSection() {
   const { t, lang } = useLang()
@@ -268,7 +275,7 @@ export default function TeamSection() {
     .sort((a, b) => FOUNDER_ORDER.indexOf(a.name) - FOUNDER_ORDER.indexOf(b.name))
   const researchers = t.TEAM
     .filter(m => m.group === 'researchers')
-    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+    .sort((a, b) => degreeRank(a.degree) - degreeRank(b.degree) || a.name.localeCompare(b.name, 'pt-BR'))
   const medical = t.TEAM
     .filter(m => m.group === 'medical')
     .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))

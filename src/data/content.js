@@ -3,6 +3,7 @@ export const NAV = {
     { label: 'Produtos', href: '#produtos-section' },
     { label: 'Tecnologia', href: '#tecnologia' },
     { label: 'Time', href: '#sobre' },
+    { label: 'Carreiras', href: '/carreiras' },
   ],
   cta: 'Agende uma conversa',
 }
@@ -105,6 +106,68 @@ export const CTA_CONTENT = {
     href: 'https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+saber+mais!',
   },
   partnersLabel: 'Parceiros',
+}
+
+export const CAREERS = {
+  hero: {
+    title: 'Construir a linha de frente de IA na saúde.',
+    subtitle: 'Entenda quem somos e como fazer parte do nosso time.',
+    ctaJobs: 'Ver vagas abertas',
+    ctaHow: 'Como trabalhamos',
+  },
+  company: {
+    titleStart: 'Curae uma empresa',
+    p1: 'A Curae é a vertical de saúde da Futuro Tech. Somos a ponte dos produtos para hospitais, clínicas e centros especializados, nos ecossistemas público e privado.',
+    p2: 'A Futuro Tech é a nossa base. A fundação da nossa cultura e no que acreditamos. É uma organização de tecnologia, inovação e ciência que orquestra o desenvolvimento de soluções de inteligência artificial para predição de risco em diferentes setores.',
+    statsLabel: 'Sobre a Futuro Tech:',
+    stats: [
+      { k: 'Experiência', num: '30+', desc: 'anos de experiência em predição de risco' },
+      { k: 'Projetos', num: '10+', desc: 'projetos científicos em desenvolvimento' },
+    ],
+    locationLabel: 'Sede em',
+    locationCity: 'Recife, PE',
+  },
+  beliefs: {
+    heading: 'Um time focado na prevenção, fluidez e eficiência do cuidado no mundo.',
+    items: [
+      { title: 'Antes, a evidência.', desc: 'Método e validação científica são a base de todos os nossos passos.' },
+      { title: 'Sair do papel.', desc: 'Gostamos de problemas difíceis, mas principalmente de resolvê-los.' },
+      { title: 'Foco no cuidado.', desc: 'Cuidamos de ponta a ponta: da gente, dos clientes e dos pacientes.' },
+      { title: 'Prever é resultado.', desc: 'Antecipar riscos com precisão move o impacto dos nossos produtos.' },
+    ],
+  },
+  faq: {
+    heading: 'Sobre o processo seletivo e o time',
+    subheading: 'Perguntas que geralmente as pessoas querem fazer.',
+    items: [
+      { q: 'Como é trabalhar aqui?', a: 'Trabalhamos de forma sobretudo presencial, embora flexível, com um time de profissionais de anos de mercado, professores, especialistas em inteligência artificial e estudantes. Nosso dia a dia vai da condução de novas linhas de pesquisa a partir de problemas complexos da saúde até a implementação de soluções no mercado e contato direto com os clientes.' },
+      { q: 'O que esperamos de você?', a: 'Aprender e experimentar rápido, respeito à ciência e vontade de imergir com tudo na construção de uma nova camada de predição para potencializar profissionais e estabelecimentos de saúde.' },
+      { q: 'Como é o processo seletivo?', a: 'Caso faça sentido para a vaga, vamos te chamar para uma conversa inicial para nos alinharmos com relação ao desafio, expectativas e nos conhecermos melhor (carreira, currículo, requisitos da vaga, etc.). Depois, conduzimos uma segunda conversa mais aprofundada já com uma proposta de trabalho. Pode envolver uma etapa técnica ou não.' },
+    ],
+  },
+  jobs: {
+    heading: 'Vagas abertas',
+    modality: 'Presencial',
+    internTag: 'Estágio',
+    juniorTag: 'Nível Júnior',
+    applyLabel: 'Candidate-se',
+    comingSoon: 'Em breve',
+    list: [
+      { title: 'Business Operations', level: 'intern', href: 'https://tally.so/r/44VLNA' },
+      { title: 'Business Operations', level: 'junior', href: null },
+      { title: 'Desenvolvimento Full-Stack', level: 'intern', href: 'https://tally.so/r/Y5lrvq' },
+      { title: 'Desenvolvimento Full-Stack', level: 'junior', href: null },
+      { title: 'Inteligência Artificial', level: 'intern', href: 'https://tally.so/r/KYKLLD' },
+      { title: 'Inteligência Artificial', level: 'junior', href: null },
+      { title: 'Pesquisa Clínica (Psicologia)', level: 'intern', href: 'https://tally.so/r/Mep5oM' },
+    ],
+    talent: {
+      title: 'Banco de talentos',
+      desc: 'Não encontrou sua vaga? Deixe seu perfil e falamos quando abrir algo do seu perfil.',
+      cta: 'Deixar meu perfil',
+      href: 'https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+deixar+meu+perfil+no+banco+de+talentos%21',
+    },
+  },
 }
 
 export const FOOTER_CONTENT = {

@@ -7,8 +7,21 @@ import BenefitsSection from './sections/BenefitsSection'
 import DiferenciaisSection from './sections/DiferenciaisSection'
 import TeamSection from './sections/TeamSection'
 import CTASection from './sections/CTASection'
+import CareersPage from './pages/CareersPage'
 
 export default function App() {
+  const isCareers = window.location.pathname.replace(/\/+$/, '') === '/carreiras'
+
+  if (isCareers) {
+    return (
+      <div style={{ background: '#ffffff', overflowX: 'hidden', paddingTop: 64 }}>
+        <Navbar />
+        <CareersPage />
+        <Footer />
+      </div>
+    )
+  }
+
   return (
     <div style={{ background: '#ffffff', overflowX: 'hidden', paddingTop: 64 }}>
       <Navbar />

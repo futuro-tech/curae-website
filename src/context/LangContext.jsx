@@ -9,7 +9,10 @@ function build(data, icons, teamBase) {
     ? data.PRODUCTS_TEXT.map((p, i) => ({ ...p, icon: icons[i].icon }))
     : icons
   const team = data.TEAM
-    ? data.TEAM.map((overrides, i) => ({ ...teamBase[i], ...overrides }))
+    ? teamBase.map(base => {
+        const overrides = data.TEAM.find(o => o.name === base.name)
+        return overrides ? { ...base, ...overrides } : base
+      })
     : teamBase
   return { ...data, PRODUCTS: products, TEAM: team }
 }
@@ -21,11 +24,15 @@ const CONTENT = {
 
 export const LangContext = createContext(null)
 
+function detectLang() {
+  const saved = localStorage.getItem('curae-lang')
+  if (saved === 'en' || saved === 'pt') return saved
+  const browserLang = navigator.language || navigator.userLanguage || ''
+  return browserLang.toLowerCase().startsWith('pt') ? 'pt' : 'en'
+}
+
 export function LangProvider({ children }) {
-  const [lang, setLang] = useState(() => {
-    const saved = localStorage.getItem('curae-lang')
-    return saved === 'en' ? 'en' : 'pt'
-  })
+  const [lang, setLang] = useState(detectLang)
 
   function handleSetLang(l) {
     localStorage.setItem('curae-lang', l)

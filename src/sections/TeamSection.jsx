@@ -4,6 +4,10 @@ import { useReveal } from '../hooks/useReveal'
 
 const BIO_LIMIT = 180
 
+function resolveImg(src) {
+  return src && src.startsWith('/') ? import.meta.env.BASE_URL + src.slice(1) : src
+}
+
 function TeamModal({ member, onClose, lang }) {
   const [visible, setVisible] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -93,7 +97,7 @@ function TeamModal({ member, onClose, lang }) {
               }}>
                 {member.img && (
                   <img
-                    src={member.img}
+                    src={resolveImg(member.img)}
                     alt={member.name}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
                   />

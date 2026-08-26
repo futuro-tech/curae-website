@@ -223,7 +223,7 @@ function TeamCard({ member, onClick, index = 0 }) {
       }}>
         {member.img && (
           <img
-            src={member.img}
+            src={resolveImg(member.img)}
             alt={member.name}
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
           />

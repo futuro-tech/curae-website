@@ -118,6 +118,7 @@ export const CAREERS = {
     ],
     locationLabel: 'Headquartered in',
     locationCity: 'Recife, Brazil',
+    locationAddress: 'Rua Madre de Deus, 300, Recife Antigo, Recife, PE',
   },
   beliefs: {
     heading: 'A team focused on prevention, fluidity and efficiency in care around the world.',

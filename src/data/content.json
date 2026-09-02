@@ -1,10 +1,22 @@
 {
   "NAV": {
     "links": [
-      { "label": "Produtos", "href": "#produtos-section" },
-      { "label": "Tecnologia", "href": "#tecnologia" },
-      { "label": "Time", "href": "#sobre" },
-      { "label": "Carreiras", "href": "/carreiras" }
+      {
+        "label": "Produtos",
+        "href": "#produtos-section"
+      },
+      {
+        "label": "Tecnologia",
+        "href": "#tecnologia"
+      },
+      {
+        "label": "Time",
+        "href": "#sobre"
+      },
+      {
+        "label": "Carreiras",
+        "href": "/carreiras"
+      }
     ],
     "cta": "Agende uma conversa"
   },
@@ -59,10 +71,18 @@
       "end": "."
     },
     "items": [
-      { "title": "IA auditável e ética" },
-      { "title": "Desenvolvido com hospitais de alta complexidade" },
-      { "title": "Pesquisa com método e validação acadêmica" },
-      { "title": "LGPD e segurança de dados desde a concepção" }
+      {
+        "title": "IA auditável e ética"
+      },
+      {
+        "title": "Desenvolvido com hospitais de alta complexidade"
+      },
+      {
+        "title": "Pesquisa com método e validação acadêmica"
+      },
+      {
+        "title": "LGPD e segurança de dados desde a concepção"
+      }
     ]
   },
   "TEAM_CONTENT": {
@@ -110,8 +130,16 @@
       "p2": "A Futuro Tech é a nossa base. A fundação da nossa cultura e no que acreditamos. É uma organização de tecnologia, inovação e ciência que orquestra o desenvolvimento de soluções de inteligência artificial para predição de risco em diferentes setores.",
       "statsLabel": "Sobre a Futuro Tech:",
       "stats": [
-        { "k": "Experiência", "num": "30+", "desc": "anos de experiência em predição de risco" },
-        { "k": "Projetos", "num": "10+", "desc": "projetos científicos em desenvolvimento" }
+        {
+          "k": "Experiência",
+          "num": "30+",
+          "desc": "anos de experiência em predição de risco"
+        },
+        {
+          "k": "Projetos",
+          "num": "10+",
+          "desc": "projetos científicos em desenvolvimento"
+        }
       ],
       "locationLabel": "Sede em",
       "locationCity": "Recife, PE",
@@ -120,10 +148,22 @@
     "beliefs": {
       "heading": "Um time focado na prevenção, fluidez e eficiência do cuidado no mundo.",
       "items": [
-        { "title": "Antes, a evidência.", "desc": "Método e validação científica são a base de todos os nossos passos." },
-        { "title": "Sair do papel.", "desc": "Gostamos de problemas difíceis, mas principalmente de resolvê-los." },
-        { "title": "Foco no cuidado.", "desc": "Cuidamos de ponta a ponta: da gente, dos clientes e dos pacientes." },
-        { "title": "Prever é resultado.", "desc": "Antecipar riscos com precisão guia o impacto dos nossos produtos." }
+        {
+          "title": "Antes, a evidência.",
+          "desc": "Método e validação científica são a base de todos os nossos passos."
+        },
+        {
+          "title": "Sair do papel.",
+          "desc": "Gostamos de problemas difíceis, mas principalmente de resolvê-los."
+        },
+        {
+          "title": "Foco no cuidado.",
+          "desc": "Cuidamos de ponta a ponta: da gente, dos clientes e dos pacientes."
+        },
+        {
+          "title": "Prever é resultado.",
+          "desc": "Antecipar riscos com precisão guia o impacto dos nossos produtos."
+        }
       ]
     },
     "faq": {
@@ -152,13 +192,41 @@
       "applyLabel": "Candidate-se",
       "comingSoon": "Em breve",
       "list": [
-        { "title": "Business Operations", "level": "intern", "href": "https://tally.so/r/44VLNA" },
-        { "title": "Business Operations", "level": "junior", "href": null },
-        { "title": "Desenvolvimento Full-Stack", "level": "intern", "href": "https://tally.so/r/Y5lrvq" },
-        { "title": "Desenvolvimento Full-Stack", "level": "junior", "href": "https://tally.so/r/q41J4k" },
-        { "title": "Inteligência Artificial", "level": "intern", "href": "https://tally.so/r/KYKLLD" },
-        { "title": "Inteligência Artificial", "level": "junior", "href": "https://tally.so/r/pbpkbb" },
-        { "title": "Pesquisa Clínica (Psicologia)", "level": "intern", "href": "https://tally.so/r/Mep5oM" }
+        {
+          "title": "Business Operations",
+          "level": "intern",
+          "href": "https://tally.so/r/44VLNA"
+        },
+        {
+          "title": "Business Operations",
+          "level": "junior",
+          "href": null
+        },
+        {
+          "title": "Desenvolvimento Full-Stack",
+          "level": "intern",
+          "href": "https://tally.so/r/Y5lrvq"
+        },
+        {
+          "title": "Desenvolvimento Full-Stack",
+          "level": "junior",
+          "href": "https://tally.so/r/q41J4k"
+        },
+        {
+          "title": "Inteligência Artificial",
+          "level": "intern",
+          "href": "https://tally.so/r/KYKLLD"
+        },
+        {
+          "title": "Inteligência Artificial",
+          "level": "junior",
+          "href": "https://tally.so/r/pbpkbb"
+        },
+        {
+          "title": "Pesquisa Clínica (Psicologia)",
+          "level": "intern",
+          "href": "https://tally.so/r/Mep5oM"
+        }
       ],
       "talent": {
         "title": "Banco de talentos",
@@ -169,7 +237,7 @@
     }
   },
   "FOOTER_CONTENT": {
-    "tagline": "Uma empresa Futuro Tech",
+    "tagline": "Uma empresa Futuro Tech teste",
     "description": "Soluções de inteligência artificial para predição de risco, operação e decisões clínicas em saúde de alta complexidade.",
     "socials": [],
     "sections": {
@@ -178,14 +246,32 @@
       "partners": "Parceiros"
     },
     "productLinks": [
-      { "name": "Eficiência do Bloco Cirúrgico", "id": "bloco" },
-      { "name": "Priorização de Pacientes por Risco", "id": "risco" },
-      { "name": "Assistência ao Diagnóstico de Endometriose", "id": "endometriose" },
-      { "name": "Triagem Oncológica por Voz", "id": "voz" },
-      { "name": "Prevenção ao Risco de Ludopatia", "id": "ludopatia" }
+      {
+        "name": "Eficiência do Bloco Cirúrgico",
+        "id": "bloco"
+      },
+      {
+        "name": "Priorização de Pacientes por Risco",
+        "id": "risco"
+      },
+      {
+        "name": "Assistência ao Diagnóstico de Endometriose",
+        "id": "endometriose"
+      },
+      {
+        "name": "Triagem Oncológica por Voz",
+        "id": "voz"
+      },
+      {
+        "name": "Prevenção ao Risco de Ludopatia",
+        "id": "ludopatia"
+      }
     ],
     "legalLinks": [],
-    "address": ["Rua Madre de Deus, 300", "Recife Antigo — Recife, PE"],
+    "address": [
+      "Rua Madre de Deus, 300",
+      "Recife Antigo — Recife, PE"
+    ],
     "copyright": "© 2026 Curae Ltda. Todos os direitos reservados."
   }
 }

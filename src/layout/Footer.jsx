@@ -1,6 +1,6 @@
 import CuraeLogo from '../components/CuraeLogo'
 import PartnersLogos from '../components/PartnersLogos'
-import { PARTNERS_FOOTER } from '../data/partners'
+import PARTNERS from '../data/partners.json'
 import { useLang } from '../context/LangContext'
 
 const col = (opacity) => `rgba(255,255,255,${opacity})`
@@ -87,7 +87,7 @@ export default function Footer() {
           <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, color: col(0.25), letterSpacing: '0.7px', textTransform: 'uppercase' }}>
             {sections.partners}
           </span>
-          <PartnersLogos partners={PARTNERS_FOOTER} gap={14} />
+          <PartnersLogos partners={PARTNERS.footer} gap={14} />
         </div>
 
         {/* Bottom: copyright + legal */}

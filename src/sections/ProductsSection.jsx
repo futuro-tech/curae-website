@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useLang } from '../context/LangContext'
-import { PRODUCT_GROUPS_PT, PRODUCT_GROUPS_EN } from '../data/productGroups'
+import PRODUCT_GROUPS from '../data/productGroups.json'
 import { useReveal } from '../hooks/useReveal'
 
 function BenefitCapsule({ icon, text, bg }) {
@@ -88,7 +88,7 @@ function ProductGroupCard({ group, index }) {
 export default function ProductsSection() {
   const { t, lang } = useLang()
   const { heading, subheading } = t.PRODUCTS_SECTION
-  const groups = lang === 'pt' ? PRODUCT_GROUPS_PT : PRODUCT_GROUPS_EN
+  const groups = lang === 'pt' ? PRODUCT_GROUPS.pt : PRODUCT_GROUPS.en
   const headingReveal = useReveal()
 
   return (

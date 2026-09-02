@@ -8,4 +8,12 @@ export default defineConfig({
     port: 5174,
     strictPort: false,
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        admin: 'admin.html',
+      },
+    },
+  },
 })

@@ -1,5 +1,5 @@
 import PartnersLogos from '../components/PartnersLogos'
-import { PARTNERS_CTA } from '../data/partners'
+import PARTNERS from '../data/partners.json'
 import { useLang } from '../context/LangContext'
 import { useReveal } from '../hooks/useReveal'
 
@@ -74,7 +74,7 @@ export default function CTASection() {
               {partnersLabel}
             </span>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <PartnersLogos partners={PARTNERS_CTA} gap={34} />
+              <PartnersLogos partners={PARTNERS.cta} gap={34} />
             </div>
           </div>
         </div>

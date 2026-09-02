@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from 'react'
 import { PRODUCTS } from '../data/products'
-import { TEAM as TEAM_BASE } from '../data/team'
+import TEAM_BASE from '../data/team.json'
 import * as PT from '../i18n/pt'
-import * as EN from '../i18n/en'
+import EN from '../i18n/en.json'
 
 function build(data, icons, teamBase) {
   const products = data.PRODUCTS_TEXT

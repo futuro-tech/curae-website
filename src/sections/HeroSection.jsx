@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import PartnersLogos from "../components/PartnersLogos";
-import { PARTNERS_HERO } from "../data/partners";
+import PARTNERS from "../data/partners.json";
 import { useLang } from "../context/LangContext";
 
 const HERO_IMG =
@@ -212,7 +212,7 @@ export default function HeroSection() {
           >
             {t.HERO.partnersLabel}
           </span>
-          <PartnersLogos partners={PARTNERS_HERO} gap={24} />
+          <PartnersLogos partners={PARTNERS.hero} gap={24} />
         </div>
       </div>
 

@@ -165,7 +165,7 @@ export const CAREERS = {
       },
       {
         title: "Prever é resultado.",
-        desc: "Antecipar riscos com precisão move o impacto dos nossos produtos.",
+        desc: "Antecipar riscos com precisão guia o impacto dos nossos produtos.",
       },
     ],
   },
@@ -183,7 +183,7 @@ export const CAREERS = {
       },
       {
         q: "Como é o processo seletivo?",
-        a: "Caso faça sentido para a vaga, vamos te chamar para uma conversa inicial para nos alinharmos com relação ao desafio, expectativas e nos conhecermos melhor (carreira, currículo, requisitos da vaga, etc.). Depois, conduzimos uma segunda conversa mais aprofundada já com uma proposta de trabalho. Pode envolver uma etapa técnica ou não.",
+        a: "Após a candidatura, convidamos você para uma primeira conversa com o RH, para nos conhecermos melhor e alinharmos as expectativas sobre a vaga. Em seguida, acontece uma segunda entrevista, com um viés mais técnico, junto aos gestores da área. Dependendo da posição, o processo também pode incluir um teste técnico. Se houver alinhamento entre as partes ao final dessas etapas, seguimos com o envio da proposta de trabalho.",
       },
     ],
   },

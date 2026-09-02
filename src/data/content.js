@@ -127,7 +127,7 @@ export const CAREERS = {
     ctaHow: "Como trabalhamos",
   },
   company: {
-    titleStart: "Curae uma empresa",
+    titleStart: "Curae é uma empresa",
     p1: "A Curae é a vertical de saúde da Futuro Tech. Somos a ponte dos produtos para hospitais, clínicas e centros especializados, nos ecossistemas público e privado.",
     p2: "A Futuro Tech é a nossa base. A fundação da nossa cultura e no que acreditamos. É uma organização de tecnologia, inovação e ciência que orquestra o desenvolvimento de soluções de inteligência artificial para predição de risco em diferentes setores.",
     statsLabel: "Sobre a Futuro Tech:",

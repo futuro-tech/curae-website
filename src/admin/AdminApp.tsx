@@ -118,7 +118,14 @@ function clearDraft(fileKey: string) {
 
 function WarningIcon() {
   return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C53030" strokeWidth="2">
+    <svg
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#C53030"
+      strokeWidth="2"
+    >
       <path d="M12 9v4M12 17h.01M10.3 3.9 2.5 18a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
     </svg>
   );
@@ -126,7 +133,14 @@ function WarningIcon() {
 
 function InfoIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4A5568" strokeWidth="2">
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#4A5568"
+      strokeWidth="2"
+    >
       <circle cx="12" cy="12" r="10" />
       <path d="M12 16v-4M12 8h.01" />
     </svg>
@@ -135,7 +149,14 @@ function InfoIcon() {
 
 function ExternalLinkIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M7 17 17 7M8 7h9v9" />
     </svg>
   );
@@ -143,7 +164,14 @@ function ExternalLinkIcon() {
 
 function LogoutIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
     </svg>
   );
@@ -151,7 +179,14 @@ function LogoutIcon() {
 
 function LockIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7885" strokeWidth="1.8">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#6b7885"
+      strokeWidth="1.8"
+    >
       <rect x="3" y="11" width="18" height="10" rx="2" />
       <path d="M7 11V7a5 5 0 0 1 10 0v4" />
     </svg>
@@ -160,7 +195,14 @@ function LockIcon() {
 
 function PublishIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A7A6E" strokeWidth="2">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#1A7A6E"
+      strokeWidth="2"
+    >
       <path d="M12 19V5M5 12l7-7 7 7" />
     </svg>
   );
@@ -168,7 +210,14 @@ function PublishIcon() {
 
 function ArrowIcon({ color = "#FAFAFA" }: { color?: string }) {
   return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2">
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+    >
       <path d="M5 12h14M13 6l6 6-6 6" />
     </svg>
   );
@@ -193,7 +242,9 @@ function TokenGate({
             institucional, com publicação direta para o ar.
           </LoginSubtext>
         </div>
-        <LoginFootnote style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <LoginFootnote
+          style={{ display: "flex", alignItems: "center", gap: 8 }}
+        >
           <LockIcon />
           Conexão segura via GitHub
         </LoginFootnote>
@@ -234,19 +285,6 @@ function TokenGate({
               <ArrowIcon />
             </Button>
           </form>
-
-          <HelperBox>
-            <HelperTitle>
-              <InfoIcon />
-              Onde encontrar o token
-            </HelperTitle>
-            1. GitHub → Settings → Developer settings
-            <br />
-            2. Personal access tokens → gere um token com permissão{" "}
-            <strong>repo</strong>
-            <br />
-            3. Cole o token no campo acima
-          </HelperBox>
         </LoginCard>
       </LoginContent>
     </LoginShell>
@@ -276,8 +314,12 @@ function FileTab({ token, file }: { token: string; file: FileMeta }) {
   const [confirming, setConfirming] = useState(false);
   const [discarding, setDiscarding] = useState(false);
   const [mode, setMode] = useState<"edit" | "preview">("edit");
-  const [previewLang, setPreviewLang] = useState<"pt" | "en">(file.key === "en" ? "en" : "pt");
-  const [previewFiles, setPreviewFiles] = useState<Partial<Record<string, JsonValue>>>({});
+  const [previewLang, setPreviewLang] = useState<"pt" | "en">(
+    file.key === "en" ? "en" : "pt",
+  );
+  const [previewFiles, setPreviewFiles] = useState<
+    Partial<Record<string, JsonValue>>
+  >({});
   const [previewError, setPreviewError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -410,23 +452,41 @@ function FileTab({ token, file }: { token: string; file: FileMeta }) {
   return (
     <div>
       <PreviewBar>
-        <SectionLabel style={{ marginBottom: 0 }}>Seção — {file.label}</SectionLabel>
+        <SectionLabel style={{ marginBottom: 0 }}>
+          Seção — {file.label}
+        </SectionLabel>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           {mode === "preview" && (
             <ModeToggle>
-              <ModeToggleButton type="button" $active={previewLang === "pt"} onClick={() => setPreviewLang("pt")}>
+              <ModeToggleButton
+                type="button"
+                $active={previewLang === "pt"}
+                onClick={() => setPreviewLang("pt")}
+              >
                 PT
               </ModeToggleButton>
-              <ModeToggleButton type="button" $active={previewLang === "en"} onClick={() => setPreviewLang("en")}>
+              <ModeToggleButton
+                type="button"
+                $active={previewLang === "en"}
+                onClick={() => setPreviewLang("en")}
+              >
                 EN
               </ModeToggleButton>
             </ModeToggle>
           )}
           <ModeToggle>
-            <ModeToggleButton type="button" $active={mode === "edit"} onClick={() => setMode("edit")}>
+            <ModeToggleButton
+              type="button"
+              $active={mode === "edit"}
+              onClick={() => setMode("edit")}
+            >
               Editar
             </ModeToggleButton>
-            <ModeToggleButton type="button" $active={mode === "preview"} onClick={() => setMode("preview")}>
+            <ModeToggleButton
+              type="button"
+              $active={mode === "preview"}
+              onClick={() => setMode("preview")}
+            >
               Pré-visualizar
             </ModeToggleButton>
           </ModeToggle>
@@ -455,7 +515,9 @@ function FileTab({ token, file }: { token: string; file: FileMeta }) {
           />
         </ContentCard>
       ) : previewError ? (
-        <p style={{ color: "#C53030" }}>Erro ao carregar pré-visualização: {previewError}</p>
+        <p style={{ color: "#C53030" }}>
+          Erro ao carregar pré-visualização: {previewError}
+        </p>
       ) : (
         <DraftPreview
           content={dataFor("content")}
@@ -508,16 +570,19 @@ function FileTab({ token, file }: { token: string; file: FileMeta }) {
             <ModalIcon>
               <PublishIcon />
             </ModalIcon>
-            <ModalTitle id="publish-modal-title">Publicar alterações?</ModalTitle>
+            <ModalTitle id="publish-modal-title">
+              Publicar alterações?
+            </ModalTitle>
             <ModalBody>
               Isso vai publicar direto no site ao vivo{" "}
-              <strong>curaeai.tech</strong>. O deploy automático leva cerca
-              de 1–2 minutos.
+              <strong>curaeai.tech</strong>. O deploy automático leva cerca de
+              1–2 minutos.
             </ModalBody>
             {visibleChanges.length > 0 && (
               <ChangesBox>
                 <ChangesTitle>
-                  {changes.length} {changes.length === 1 ? "alteração" : "alterações"} em{" "}
+                  {changes.length}{" "}
+                  {changes.length === 1 ? "alteração" : "alterações"} em{" "}
                   {file.label}
                 </ChangesTitle>
                 {visibleChanges.map((line, i) => (
@@ -528,8 +593,8 @@ function FileTab({ token, file }: { token: string; file: FileMeta }) {
                 ))}
                 {extraChangeCount > 0 && (
                   <ChangeItem>
-                    <ChangeDot />
-                    e mais {extraChangeCount} {extraChangeCount === 1 ? "alteração" : "alterações"}
+                    <ChangeDot />e mais {extraChangeCount}{" "}
+                    {extraChangeCount === 1 ? "alteração" : "alterações"}
                   </ChangeItem>
                 )}
               </ChangesBox>
@@ -562,7 +627,9 @@ function FileTab({ token, file }: { token: string; file: FileMeta }) {
             <ModalIcon>
               <WarningIcon />
             </ModalIcon>
-            <ModalTitle id="discard-modal-title">Descartar alterações?</ModalTitle>
+            <ModalTitle id="discard-modal-title">
+              Descartar alterações?
+            </ModalTitle>
             <ModalBody>
               Isso vai desfazer as edições não salvas nesta aba e voltar ao
               conteúdo publicado atualmente. Não tem como recuperar depois.
@@ -570,7 +637,10 @@ function FileTab({ token, file }: { token: string; file: FileMeta }) {
             {visibleChanges.length > 0 && (
               <ChangesBox>
                 <ChangesTitle>
-                  {changes.length} {changes.length === 1 ? "alteração será perdida" : "alterações serão perdidas"}
+                  {changes.length}{" "}
+                  {changes.length === 1
+                    ? "alteração será perdida"
+                    : "alterações serão perdidas"}
                 </ChangesTitle>
                 {visibleChanges.map((line, i) => (
                   <ChangeItem key={i}>
@@ -580,8 +650,8 @@ function FileTab({ token, file }: { token: string; file: FileMeta }) {
                 ))}
                 {extraChangeCount > 0 && (
                   <ChangeItem>
-                    <ChangeDot />
-                    e mais {extraChangeCount} {extraChangeCount === 1 ? "alteração" : "alterações"}
+                    <ChangeDot />e mais {extraChangeCount}{" "}
+                    {extraChangeCount === 1 ? "alteração" : "alterações"}
                   </ChangeItem>
                 )}
               </ChangesBox>
@@ -606,7 +676,9 @@ function FileTab({ token, file }: { token: string; file: FileMeta }) {
 }
 
 export default function AdminApp() {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem(TOKEN_KEY),
+  );
   const [authError, setAuthError] = useState<string | null>(null);
   const [active, setActive] = useState(FILES[0].key);
 
@@ -638,14 +710,20 @@ export default function AdminApp() {
   return (
     <>
       <AdminGlobalStyle />
-      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <div
+        style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
+      >
         <Header>
           <HeaderBrand>
             <HeaderWordmark>Curae</HeaderWordmark>
             <Badge>ADMIN</Badge>
           </HeaderBrand>
           <HeaderNav>
-            <HeaderLink href="https://curaeai.tech" target="_blank" rel="noreferrer">
+            <HeaderLink
+              href="https://curaeai.tech"
+              target="_blank"
+              rel="noreferrer"
+            >
               Ver site ao vivo
               <ExternalLinkIcon />
             </HeaderLink>
@@ -660,8 +738,8 @@ export default function AdminApp() {
         <Main>
           <PageTitle>Conteúdo do site</PageTitle>
           <PageSubtitle>
-            Edite os textos e imagens exibidos publicamente. As alterações
-            são publicadas ao salvar.
+            Edite os textos e imagens exibidos publicamente. As alterações são
+            publicadas ao salvar.
           </PageSubtitle>
 
           {authError && (
@@ -704,11 +782,16 @@ export default function AdminApp() {
           </Tabs>
 
           {FILES.map((f) => (
-            <div key={f.key} style={{ display: active === f.key ? "block" : "none" }}>
+            <div
+              key={f.key}
+              style={{ display: active === f.key ? "block" : "none" }}
+            >
               <FileTab token={token} file={f} />
             </div>
           ))}
-          <div style={{ display: active === CAREERS_TAB.key ? "block" : "none" }}>
+          <div
+            style={{ display: active === CAREERS_TAB.key ? "block" : "none" }}
+          >
             <CareersPreview token={token} />
           </div>
         </Main>
@@ -716,3 +799,4 @@ export default function AdminApp() {
     </>
   );
 }
+

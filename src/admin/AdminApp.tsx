@@ -226,9 +226,11 @@ function ArrowIcon({ color = "#FAFAFA" }: { color?: string }) {
 function TokenGate({
   onSubmit,
   error,
+  checking,
 }: {
   onSubmit: (token: string) => void;
   error: string | null;
+  checking: boolean;
 }) {
   const [value, setValue] = useState("");
   return (
@@ -267,7 +269,7 @@ function TokenGate({
           <form
             onSubmit={(e: FormEvent) => {
               e.preventDefault();
-              if (value.trim()) onSubmit(value.trim());
+              if (value.trim() && !checking) onSubmit(value.trim());
             }}
           >
             <FieldGroup style={{ marginBottom: 16 }}>
@@ -277,12 +279,13 @@ function TokenGate({
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="ghp_... ou github_pat_..."
+                disabled={checking}
               />
             </FieldGroup>
 
-            <Button type="submit" $variant="navy">
-              Entrar
-              <ArrowIcon />
+            <Button type="submit" $variant="navy" disabled={checking}>
+              {checking ? "Verificando…" : "Entrar"}
+              {!checking && <ArrowIcon />}
             </Button>
           </form>
         </LoginCard>
@@ -680,17 +683,43 @@ export default function AdminApp() {
     localStorage.getItem(TOKEN_KEY),
   );
   const [authError, setAuthError] = useState<string | null>(null);
+  const [checkingStoredToken, setCheckingStoredToken] = useState(
+    () => localStorage.getItem(TOKEN_KEY) !== null,
+  );
+  const [checkingNewToken, setCheckingNewToken] = useState(false);
   const [active, setActive] = useState(FILES[0].key);
 
   useEffect(() => {
     if (!token) return;
-    whoAmI(token).catch((err: Error) => setAuthError(err.message));
-  }, [token]);
+    let cancelled = false;
+    whoAmI(token)
+      .catch((err: Error) => {
+        if (cancelled) return;
+        localStorage.removeItem(TOKEN_KEY);
+        setToken(null);
+        setAuthError(err.message);
+      })
+      .finally(() => {
+        if (!cancelled) setCheckingStoredToken(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  function handleToken(value: string) {
-    localStorage.setItem(TOKEN_KEY, value);
+  async function handleToken(value: string) {
+    setCheckingNewToken(true);
     setAuthError(null);
-    setToken(value);
+    try {
+      await whoAmI(value);
+      localStorage.setItem(TOKEN_KEY, value);
+      setToken(value);
+    } catch (err) {
+      setAuthError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setCheckingNewToken(false);
+    }
   }
 
   function logout() {
@@ -698,11 +727,15 @@ export default function AdminApp() {
     setToken(null);
   }
 
-  if (!token) {
+  if (!token || checkingStoredToken) {
     return (
       <>
         <AdminGlobalStyle />
-        <TokenGate onSubmit={handleToken} error={authError} />
+        <TokenGate
+          onSubmit={handleToken}
+          error={authError}
+          checking={checkingNewToken || checkingStoredToken}
+        />
       </>
     );
   }
@@ -741,25 +774,6 @@ export default function AdminApp() {
             Edite os textos e imagens exibidos publicamente. As alterações são
             publicadas ao salvar.
           </PageSubtitle>
-
-          {authError && (
-            <ErrorBanner style={{ marginTop: 20 }}>
-              <WarningIcon />
-              <div>
-                Token inválido ou sem acesso ao repositório ({authError}).{" "}
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    logout();
-                  }}
-                  style={{ color: "inherit", textDecoration: "underline" }}
-                >
-                  Trocar token
-                </a>
-              </div>
-            </ErrorBanner>
-          )}
 
           <Tabs>
             {FILES.map((f) => (

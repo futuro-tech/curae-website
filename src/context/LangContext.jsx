@@ -1,25 +1,21 @@
 import { createContext, useContext, useState } from 'react'
-import { PRODUCTS } from '../data/products'
 import TEAM_BASE from '../data/team.json'
 import * as PT from '../i18n/pt'
 import EN from '../i18n/en.json'
 
-function build(data, icons, teamBase) {
-  const products = data.PRODUCTS_TEXT
-    ? data.PRODUCTS_TEXT.map((p, i) => ({ ...p, icon: icons[i].icon }))
-    : icons
+function build(data, teamBase) {
   const team = data.TEAM
     ? teamBase.map(base => {
         const overrides = data.TEAM.find(o => o.name === base.name)
         return overrides ? { ...base, ...overrides } : base
       })
     : teamBase
-  return { ...data, PRODUCTS: products, TEAM: team }
+  return { ...data, TEAM: team }
 }
 
 const CONTENT = {
-  pt: build(PT, PRODUCTS, TEAM_BASE),
-  en: build(EN, PRODUCTS, TEAM_BASE),
+  pt: build(PT, TEAM_BASE),
+  en: build(EN, TEAM_BASE),
 }
 
 export const LangContext = createContext(null)

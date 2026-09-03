@@ -85,7 +85,7 @@ export default function Navbar() {
           <LangToggle lang={lang} setLang={setLang} dark={false} />
 
           <a
-            href="https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+saber+mais!"
+            href={t.CTA_CONTENT.button.href}
             target="_blank"
             rel="noopener noreferrer"
             className="nav-desktop"
@@ -149,7 +149,7 @@ export default function Navbar() {
             )
           })}
           <a
-            href="https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+saber+mais!"
+            href={t.CTA_CONTENT.button.href}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}

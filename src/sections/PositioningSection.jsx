@@ -16,6 +16,7 @@ export default function PositioningSection() {
       overflow: 'hidden',
     }}>
       <img
+        src={HASSAN_IMG}
         alt=""
         aria-hidden
         style={{

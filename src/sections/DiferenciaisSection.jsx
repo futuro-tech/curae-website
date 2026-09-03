@@ -59,14 +59,9 @@ function DiferenciaisItem({ item, index }) {
       }}>
         {item.icon}
       </div>
-      <div>
-        <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600, color: '#0D1B2A', lineHeight: '19.5px', marginBottom: 4 }}>
-          {item.title}
-        </h3>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 400, color: '#4A5568', lineHeight: '20px' }}>
-          {item.desc}
-        </p>
-      </div>
+      <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600, color: '#0D1B2A', lineHeight: '19.5px' }}>
+        {item.title}
+      </h3>
     </div>
   )
 }

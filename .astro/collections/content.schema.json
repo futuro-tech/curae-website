@@ -1,0 +1,354 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "NAV": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "href": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "href"
+            ]
+          }
+        },
+        "cta": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "links",
+        "cta"
+      ]
+    },
+    "HERO": {
+      "type": "object",
+      "properties": {
+        "pretitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "paragraph": {
+          "type": "string"
+        },
+        "cta": {
+          "type": "string"
+        },
+        "articles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "cta": {
+                "type": "string"
+              },
+              "href": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "title",
+              "description",
+              "cta",
+              "href"
+            ]
+          }
+        }
+      },
+      "required": [
+        "pretitle",
+        "title",
+        "paragraph",
+        "cta",
+        "articles"
+      ],
+      "additionalProperties": {}
+    },
+    "POSITIONING": {
+      "type": "object",
+      "properties": {
+        "paragraph1": {
+          "type": "string"
+        },
+        "paragraph2": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "emphasis": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "text",
+            "emphasis"
+          ]
+        }
+      },
+      "required": [
+        "paragraph1",
+        "paragraph2"
+      ],
+      "additionalProperties": {}
+    },
+    "PRODUCTS_SECTION": {
+      "type": "object",
+      "properties": {
+        "heading": {
+          "type": "object",
+          "properties": {
+            "before": {
+              "type": "string"
+            },
+            "emphasis": {
+              "type": "string"
+            },
+            "end": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "before",
+            "emphasis",
+            "end"
+          ]
+        },
+        "subheading": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "heading",
+        "subheading"
+      ],
+      "additionalProperties": {}
+    },
+    "BENEFITS": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "icon": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "description"
+        ]
+      }
+    },
+    "DIFERENCIAIS": {
+      "type": "object",
+      "properties": {
+        "heading": {
+          "type": "object",
+          "properties": {
+            "before": {
+              "type": "string"
+            },
+            "emphasis": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "before",
+            "emphasis"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "icon": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title"
+            ]
+          }
+        }
+      },
+      "required": [
+        "heading",
+        "items"
+      ],
+      "additionalProperties": {}
+    },
+    "TEAM_CONTENT": {
+      "type": "object",
+      "properties": {
+        "heading": {
+          "type": "string"
+        },
+        "subheading": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "heading",
+        "subheading"
+      ],
+      "additionalProperties": {}
+    },
+    "CTA_CONTENT": {
+      "type": "object",
+      "properties": {
+        "heading": {
+          "type": "object",
+          "properties": {
+            "before": {
+              "type": "string"
+            },
+            "emphasis": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "before",
+            "emphasis"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "button": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label",
+            "href"
+          ]
+        }
+      },
+      "required": [
+        "heading",
+        "description",
+        "button"
+      ],
+      "additionalProperties": {}
+    },
+    "FOOTER_CONTENT": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "description"
+            ]
+          }
+        },
+        "address": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "productLinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "legal": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "href": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "href"
+            ]
+          }
+        }
+      },
+      "additionalProperties": {}
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "NAV",
+    "HERO",
+    "POSITIONING",
+    "PRODUCTS_SECTION",
+    "DIFERENCIAIS",
+    "TEAM_CONTENT",
+    "CTA_CONTENT",
+    "FOOTER_CONTENT"
+  ],
+  "additionalProperties": {}
+}

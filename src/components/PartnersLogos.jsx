@@ -1,6 +1,8 @@
 export default function PartnersLogos({ partners, gap = 24 }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap, flexWrap: 'wrap' }}>
+    <div
+      style={{ display: 'flex', alignItems: 'center', gap, flexWrap: 'wrap' }}
+    >
       {partners.map(p => (
         <img
           key={p.name}

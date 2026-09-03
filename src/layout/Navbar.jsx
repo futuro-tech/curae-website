@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import CuraeLogo from '../components/CuraeLogo'
 import { useLang } from '../context/LangContext'
 
@@ -23,12 +24,8 @@ function LangToggle({ lang, setLang, dark }) {
   )
 }
 
-const BASE_URL = import.meta.env.BASE_URL
-const isHome = window.location.pathname === BASE_URL || window.location.pathname === BASE_URL.replace(/\/$/, '')
-
-function resolveHref(href) {
-  if (href.startsWith('#')) return isHome ? href : BASE_URL + href
-  if (href.startsWith('/')) return BASE_URL + href.slice(1)
+function resolveTo(href, isHome) {
+  if (href.startsWith('#')) return isHome ? href : `/${href}`
   return href
 }
 
@@ -37,6 +34,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const { lang, setLang, t } = useLang()
   const { NAV } = t
+  const location = useLocation()
+  const isHome = location.pathname === '/'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -66,21 +65,20 @@ export default function Navbar() {
         alignItems: 'center',
         justifyContent: 'space-between',
       }}>
-        <a href={BASE_URL} aria-label="Curae">
+        <Link to="/" aria-label="Curae">
           <CuraeLogo variant="dark" />
-        </a>
+        </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 32 }} className="nav-desktop">
-          {NAV.links.map(link => (
-            <a
-              key={link.label}
-              href={resolveHref(link.href)}
-              className="nav-link"
-              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 400, color: '#4A5568', lineHeight: '21px' }}
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV.links.map(link => {
+            const to = resolveTo(link.href, isHome)
+            const style = { fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 400, color: '#4A5568', lineHeight: '21px' }
+            return to.startsWith('#') ? (
+              <a key={link.label} href={to} className="nav-link" style={style}>{link.label}</a>
+            ) : (
+              <Link key={link.label} to={to} className="nav-link" style={style}>{link.label}</Link>
+            )
+          })}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -141,13 +139,15 @@ export default function Navbar() {
           padding: '24px var(--section-px)',
           display: 'flex', flexDirection: 'column', gap: 20,
         }}>
-          {NAV.links.map(link => (
-            <a key={link.label} href={resolveHref(link.href)}
-              onClick={() => setMenuOpen(false)}
-              style={{ fontSize: 16, color: '#4A5568', fontWeight: 400 }}>
-              {link.label}
-            </a>
-          ))}
+          {NAV.links.map(link => {
+            const to = resolveTo(link.href, isHome)
+            const style = { fontSize: 16, color: '#4A5568', fontWeight: 400 }
+            return to.startsWith('#') ? (
+              <a key={link.label} href={to} onClick={() => setMenuOpen(false)} style={style}>{link.label}</a>
+            ) : (
+              <Link key={link.label} to={to} onClick={() => setMenuOpen(false)} style={style}>{link.label}</Link>
+            )
+          })}
           <a
             href="https://wa.me/5581995299746?text=Oi%2C+vim+pelo+site+da+Curae+e+gostaria+de+saber+mais!"
             target="_blank"

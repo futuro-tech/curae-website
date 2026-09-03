@@ -1,4 +1,10 @@
-export default function CuraeLogo({ variant = 'dark', width = 88, height = 22 }) {
+interface CuraeLogoProps {
+  variant?: 'dark' | 'light'
+  width?: number
+  height?: number
+}
+
+export default function CuraeLogo({ variant = 'dark', width = 88, height = 22 }: CuraeLogoProps) {
   const fill = variant === 'dark' ? '#0D1B2A' : '#FAFAFA'
   const id = `curae-clip-${variant}`
 

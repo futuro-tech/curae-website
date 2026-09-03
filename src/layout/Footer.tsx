@@ -1,59 +1,186 @@
+import styled from 'styled-components'
 import CuraeLogo from '../components/CuraeLogo'
 import PartnersLogos from '../components/PartnersLogos'
 import PARTNERS from '../data/partners.json'
 import { useLang } from '../context/LangContext'
+import { Container, tokens } from '../components/styled'
 
-const col = (opacity) => `rgba(255,255,255,${opacity})`
+const col = (opacity: number) => `rgba(255,255,255,${opacity})`
+
+const FooterEl = styled.footer`
+  background: ${tokens.footerBg};
+  border-top: 0.5px solid rgba(255,255,255,0.08);
+  padding: clamp(40px, 5vw, 48px) var(--section-px);
+`
+
+const TopRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 48px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`
+
+const BrandCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`
+
+const Tagline = styled.p`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: ${col(0.4)};
+  line-height: 18px;
+`
+
+const Description = styled.p`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20.8px;
+  color: ${col(0.5)};
+  max-width: 300px;
+`
+
+const SocialsRow = styled.div`
+  display: flex;
+  gap: 12px;
+`
+
+const SocialLink = styled.a`
+  color: ${col(0.4)};
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  transition: color 0.15s;
+
+  &:hover {
+    color: ${col(0.8)};
+  }
+`
+
+const ProductsCol = styled.div`
+  min-width: 220px;
+`
+
+const AddressCol = styled.div`
+  min-width: 180px;
+`
+
+const ColLabel = styled.p`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: ${col(0.3)};
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+`
+
+const ProductLink = styled.a`
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: ${col(0.5)};
+  line-height: 19.5px;
+  padding-top: 10px;
+  transition: color 0.15s;
+  cursor: pointer;
+
+  &:hover {
+    color: ${col(0.85)};
+  }
+`
+
+const AddressText = styled.p`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: ${col(0.5)};
+  line-height: 20.8px;
+`
+
+const PartnersRow = styled.div`
+  border-top: 0.5px solid rgba(255,255,255,0.06);
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+`
+
+const PartnersLabel = styled.span`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  color: ${col(0.25)};
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+`
+
+const BottomRow = styled.div`
+  border-top: 0.5px solid rgba(255,255,255,0.06);
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+`
+
+const Copyright = styled.p`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: ${col(0.25)};
+  line-height: 18px;
+`
+
+const LegalLinks = styled.div`
+  display: flex;
+  gap: 24px;
+`
+
+const LegalLink = styled.a`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: ${col(0.25)};
+  line-height: 18px;
+  transition: color 0.15s;
+
+  &:hover {
+    color: ${col(0.6)};
+  }
+`
 
 export default function Footer() {
   const { t } = useLang()
   const { tagline, description, socials, sections, productLinks, legalLinks, address, copyright } = t.FOOTER_CONTENT
+
   return (
-    <footer style={{
-      background: '#0A1520',
-      borderTop: '0.5px solid rgba(255,255,255,0.08)',
-      padding: 'clamp(40px, 5vw, 48px) var(--section-px)',
-    }}>
-      <div style={{ maxWidth: 'var(--max-content)', margin: '0 auto' }}>
-
-        {/* Top row: logo | products | address */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr auto auto',
-          gap: 48,
-          marginBottom: 24,
-          paddingBottom: 24,
-          alignItems: 'start',
-        }}>
-          {/* Col 1: brand */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <FooterEl>
+      <Container maxWidth="content">
+        <TopRow>
+          <BrandCol>
             <CuraeLogo variant="light" width={80} height={20} />
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 400, color: col(0.4), lineHeight: '18px' }}>
-              {tagline}
-            </p>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 400, lineHeight: '20.8px', color: col(0.5), maxWidth: 300 }}>
-              {description}
-            </p>
-            <div style={{ display: 'flex', gap: 12 }}>
-              {socials.map(({ label, href }) => (
-                <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                  style={{ color: col(0.4), fontSize: 13, fontFamily: "'DM Sans', sans-serif", transition: 'color 0.15s' }}
-                  onMouseEnter={e => e.currentTarget.style.color = col(0.8)}
-                  onMouseLeave={e => e.currentTarget.style.color = col(0.4)}
-                >
+            <Tagline>{tagline}</Tagline>
+            <Description>{description}</Description>
+            <SocialsRow>
+              {socials.map(({ label, href }: { label: string; href: string }) => (
+                <SocialLink key={label} href={href} target="_blank" rel="noopener noreferrer">
                   {label}
-                </a>
+                </SocialLink>
               ))}
-            </div>
-          </div>
+            </SocialsRow>
+          </BrandCol>
 
-          {/* Col 2: products */}
-          <div style={{ minWidth: 220 }}>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: col(0.3), letterSpacing: '0.88px', textTransform: 'uppercase', marginBottom: 16 }}>
-              {sections.products}
-            </p>
-            {productLinks.map(p => (
-              <a
+          <ProductsCol>
+            <ColLabel>{sections.products}</ColLabel>
+            {productLinks.map((p: { id: string; name: string }) => (
+              <ProductLink
                 key={p.id}
                 href="#produtos-section"
                 onClick={e => {
@@ -62,59 +189,34 @@ export default function Footer() {
                   window.dispatchEvent(new HashChangeEvent('hashchange'))
                   document.getElementById('produtos-section')?.scrollIntoView({ behavior: 'smooth' })
                 }}
-                style={{ display: 'block', fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: col(0.5), lineHeight: '19.5px', paddingTop: 10, transition: 'color 0.15s', cursor: 'pointer' }}
-                onMouseEnter={e => e.currentTarget.style.color = col(0.85)}
-                onMouseLeave={e => e.currentTarget.style.color = col(0.5)}
               >
                 {p.name}
-              </a>
+              </ProductLink>
             ))}
-          </div>
+          </ProductsCol>
 
-          {/* Col 3: address */}
-          <div style={{ minWidth: 180 }}>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: col(0.3), letterSpacing: '0.88px', textTransform: 'uppercase', marginBottom: 16 }}>
-              {sections.address}
-            </p>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: col(0.5), lineHeight: '20.8px' }}>
+          <AddressCol>
+            <ColLabel>{sections.address}</ColLabel>
+            <AddressText>
               {address[0]}<br />{address[1]}
-            </p>
-          </div>
-        </div>
+            </AddressText>
+          </AddressCol>
+        </TopRow>
 
-        {/* Partners row */}
-        <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.06)', paddingTop: 24, display: 'flex', alignItems: 'center', gap: 26, marginBottom: 24, flexWrap: 'wrap' }}>
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, color: col(0.25), letterSpacing: '0.7px', textTransform: 'uppercase' }}>
-            {sections.partners}
-          </span>
+        <PartnersRow>
+          <PartnersLabel>{sections.partners}</PartnersLabel>
           <PartnersLogos partners={PARTNERS.footer} gap={14} />
-        </div>
+        </PartnersRow>
 
-        {/* Bottom: copyright + legal */}
-        <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.06)', paddingTop: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: col(0.25), lineHeight: '18px' }}>
-            {copyright}
-          </p>
-          <div style={{ display: 'flex', gap: 24 }}>
-            {legalLinks.map(link => (
-              <a key={link} href="#"
-                style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: col(0.25), lineHeight: '18px', transition: 'color 0.15s' }}
-                onMouseEnter={e => e.currentTarget.style.color = col(0.6)}
-                onMouseLeave={e => e.currentTarget.style.color = col(0.25)}
-              >
-                {link}
-              </a>
+        <BottomRow>
+          <Copyright>{copyright}</Copyright>
+          <LegalLinks>
+            {legalLinks.map((link: string) => (
+              <LegalLink key={link} href="#">{link}</LegalLink>
             ))}
-          </div>
-        </div>
-
-      </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          footer > div > div:first-child { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
-    </footer>
+          </LegalLinks>
+        </BottomRow>
+      </Container>
+    </FooterEl>
   )
 }

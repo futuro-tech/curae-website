@@ -1,12 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type PointerEvent as ReactPointerEvent, type MouseEvent as ReactMouseEvent } from "react";
+import styled from "styled-components";
 import PartnersLogos from "../components/PartnersLogos";
 import PARTNERS from "../data/partners.json";
 import { useLang } from "../context/LangContext";
+import { Section, tokens } from "../components/styled";
 
 const HERO_IMG =
   "https://api.builder.io/api/v1/image/assets/TEMP/505760c7436e51894b22ecc5f5665f883830b103?width=2976";
 
-function ChevronIcon({ direction }) {
+function ChevronIcon({ direction }: { direction: "left" | "right" }) {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
       <path
@@ -20,11 +22,284 @@ function ChevronIcon({ direction }) {
   );
 }
 
-export default function HeroSection() {
+const BackgroundImg = styled.img`
+  font-style: italic;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140%;
+  min-width: 900px;
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+  pointer-events: none;
+  user-select: none;
+`;
+
+const HeroGrid = styled.div`
+  position: relative;
+  max-width: 1244px;
+  margin: 0 auto;
+  padding: clamp(72px, 9vw, 120px) var(--section-px) clamp(52px, 7vw, 90px);
+  display: grid;
+  grid-template-columns: 5fr 3fr;
+  gap: 40px;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding-bottom: 40px;
+
+    p {
+      margin-left: 0;
+    }
+  }
+`;
+
+const HeroHeading = styled.h1`
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(46px, 7.4vw, 80px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: ${tokens.navy};
+  font-weight: 300;
+  font-style: italic;
+`;
+
+const HeroEmphasis = styled.span`
+  font-weight: 600;
+  font-style: italic;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+`;
+
+const HeroParagraph = styled.p`
+  font-family: "DM Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 380;
+  line-height: 1.62;
+  color: ${tokens.text};
+  max-width: 380px;
+`;
+
+const PartnersStrip = styled.div`
+  max-width: 1244px;
+  margin: 0 auto;
+  padding: 0 var(--section-px);
+  border-top: 0.5px solid ${tokens.border};
+`;
+
+const PartnersRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 0;
+  flex-wrap: wrap;
+`;
+
+const PartnersLabel = styled.span`
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: ${tokens.muted};
+  letter-spacing: 0.77px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+`;
+
+const ArticleBar = styled.div<{ $hovered: boolean; $canDrag: boolean; $dragging: boolean }>`
+  position: relative;
+  background: ${(props) => (props.$hovered ? "#162435" : tokens.navy)};
+  padding: 14px 0;
+  transition: background 0.2s ease;
+  border-top: ${(props) =>
+    props.$hovered
+      ? "0.5px solid rgba(94,204,195,0.25)"
+      : "0.5px solid transparent"};
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: ${(props) =>
+    props.$canDrag ? (props.$dragging ? "grabbing" : "grab") : "default"};
+  user-select: ${(props) => (props.$dragging ? "none" : "auto")};
+
+  @media (max-width: 768px) {
+    padding: 16px 0;
+  }
+`;
+
+const ArticleTrack = styled.div`
+  display: flex;
+`;
+
+const ArticleSlide = styled.div`
+  min-width: 0;
+`;
+
+const ArticleDesktop = styled.div`
+  max-width: 1244px;
+  margin: 0 auto;
+  padding: 0 var(--section-px);
+  display: block;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const ArticleMobile = styled.div`
+  max-width: 1244px;
+  margin: 0 auto;
+  padding: 0 var(--section-px);
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const ArticleLink = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+`;
+
+const ArticleBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 2px;
+  background: ${tokens.tealbg};
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: ${tokens.teal};
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+`;
+
+const ArticleSource = styled.span`
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+`;
+
+const ArticleDivider = styled.div`
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+`;
+
+const ArticleTitle = styled.p`
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 19.5px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+
+const ArticleCta = styled.span<{ $hovered: boolean }>`
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: ${(props) => (props.$hovered ? "#5ECCC3" : tokens.offWhite)};
+  opacity: ${(props) => (props.$hovered ? 1 : 0.85)};
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.2s ease, opacity 0.2s ease;
+`;
+
+const MobileArticleHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+`;
+
+const MobileArticleBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 2px;
+  background: ${tokens.tealbg};
+  font-family: "DM Sans", sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  color: ${tokens.teal};
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+`;
+
+const MobileArticleSource = styled.span`
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+`;
+
+const MobileArticleTitle = styled.p`
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.5;
+  margin-bottom: 10px;
+`;
+
+const MobileArticleCta = styled.span`
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #5eccc3;
+`;
+
+const ArrowsWrapper = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+`;
+
+const ArrowsInner = styled.div`
+  max-width: 1244px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 var(--section-px);
+  position: relative;
+`;
+
+const ArrowButton = styled.button<{ $direction: 'left' | 'right'; $hoveredArrow: string | null; $articleHovered: boolean }>`
+  position: absolute;
+  ${(props) => (props.$direction === "left" ? "left: 0;" : "right: 0;")}
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: ${(props) => {
+    if (props.$hoveredArrow === props.$direction) return 1;
+    return props.$articleHovered ? 0.55 : 0.3;
+  }};
+  transition: opacity 0.2s ease;
+`;
+
+export default function HeroSection({ partners }: { partners?: typeof PARTNERS } = {}) {
   const { t } = useLang();
   const { headline: h, articles } = t.HERO;
   const [articleHovered, setArticleHovered] = useState(false);
-  const [hoveredArrow, setHoveredArrow] = useState(null);
+  const [hoveredArrow, setHoveredArrow] = useState<string | null>(null);
   const [articleIndex, setArticleIndex] = useState(0);
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
@@ -43,7 +318,7 @@ export default function HeroSection() {
     return () => clearInterval(id);
   }, [articles, articleHovered, dragging, canDrag]);
 
-  function handlePointerDown(e) {
+  function handlePointerDown(e: ReactPointerEvent<HTMLDivElement>) {
     // Use window-level listeners instead of setPointerCapture so a plain
     // click (no movement) still lets the browser fire a native click on
     // the anchor underneath — capture would retarget mouseup and swallow it.
@@ -53,7 +328,7 @@ export default function HeroSection() {
     dragInfo.current.currentX = 0;
     setDragging(true);
 
-    function onMove(ev) {
+    function onMove(ev: PointerEvent) {
       const delta = ev.clientX - dragInfo.current.startX;
       if (Math.abs(delta) > 6) dragInfo.current.moved = true;
       dragInfo.current.currentX = delta;
@@ -81,164 +356,46 @@ export default function HeroSection() {
     window.addEventListener("pointercancel", onUp);
   }
 
-  function handleArticleLinkClick(e) {
+  function handleArticleLinkClick(e: ReactMouseEvent<HTMLAnchorElement>) {
     if (dragInfo.current.moved) e.preventDefault();
   }
 
   return (
-    <section
-      id="produtos"
-      style={{
-        background: "#FAFAFA",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Wave — full background */}
-      <img
-        src={HERO_IMG}
-        alt=""
-        aria-hidden
-        style={{
-          fontStyle: "italic",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "140%",
-          minWidth: 900,
-          mixBlendMode: "multiply",
-          opacity: 0.75,
-          pointerEvents: "none",
-          userSelect: "none",
-        }}
-      />
+    <Section id="produtos" bg="offWhite" spacing="none">
+      <BackgroundImg src={HERO_IMG} alt="" aria-hidden />
 
-      {/* H1 + paragraph grid */}
-      <div
-        style={{
-          position: "relative",
-          maxWidth: 1244,
-          margin: "0 auto",
-          padding:
-            "clamp(72px, 9vw, 120px) var(--section-px) clamp(52px, 7vw, 90px)",
-          display: "grid",
-          gridTemplateColumns: "5fr 3fr",
-          gap: 40,
-          alignItems: "center",
-        }}
-      >
-        <h1
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "clamp(46px, 7.4vw, 80px)",
-            lineHeight: 1.1,
-            letterSpacing: "-0.01em",
-            color: "#0D1B2A",
-            fontWeight: 300,
-            fontStyle: "italic",
-          }}
-        >
+      <HeroGrid>
+        <HeroHeading>
           {h.line1}
           <br />
           {h.line2}
           <br />
-          <span
-            style={{
-              fontWeight: 600,
-              fontStyle: "italic",
-              textDecoration: "underline",
-              textUnderlineOffset: 4,
-            }}
-          >
-            {h.emphasis1}
-          </span>
+          <HeroEmphasis>{h.emphasis1}</HeroEmphasis>
           {h.middle}
-          <span
-            style={{
-              fontWeight: 600,
-              fontStyle: "italic",
-              textDecoration: "underline",
-              textUnderlineOffset: 4,
-            }}
-          >
-            {h.emphasis2}
-          </span>
+          <HeroEmphasis>{h.emphasis2}</HeroEmphasis>
           {h.end}
-        </h1>
+        </HeroHeading>
 
-        <p
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 18,
-            fontWeight: 380,
-            lineHeight: 1.62,
-            color: "#4A5568",
-            maxWidth: 380,
-          }}
-        >
-          {t.HERO.paragraph}
-        </p>
-      </div>
+        <HeroParagraph>{t.HERO.paragraph}</HeroParagraph>
+      </HeroGrid>
 
-      {/* Partners strip */}
-      <div
-        style={{
-          maxWidth: 1244,
-          margin: "0 auto",
-          padding: "0 var(--section-px)",
-          borderTop: "0.5px solid #D1D9E0",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 24,
-            padding: "18px 0",
-            flexWrap: "wrap",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 11,
-              fontWeight: 400,
-              color: "#9AA5B1",
-              letterSpacing: "0.77px",
-              textTransform: "uppercase",
-              flexShrink: 0,
-            }}
-          >
-            {t.HERO.partnersLabel}
-          </span>
-          <PartnersLogos partners={PARTNERS.hero} gap={24} />
-        </div>
-      </div>
+      <PartnersStrip>
+        <PartnersRow>
+          <PartnersLabel>{t.HERO.partnersLabel}</PartnersLabel>
+          <PartnersLogos partners={(partners ?? PARTNERS).hero} gap={24} />
+        </PartnersRow>
+      </PartnersStrip>
 
-      {/* Article bar (draggable carousel) */}
-      <div
+      <ArticleBar
         onMouseEnter={() => setArticleHovered(true)}
         onMouseLeave={() => setArticleHovered(false)}
         onPointerDown={canDrag ? handlePointerDown : undefined}
-        className="article-bar"
-        style={{
-          position: "relative",
-          background: articleHovered ? "#162435" : "#0D1B2A",
-          padding: "14px 0",
-          transition: "background 0.2s ease",
-          borderTop: articleHovered
-            ? "0.5px solid rgba(94,204,195,0.25)"
-            : "0.5px solid transparent",
-          overflow: "hidden",
-          touchAction: "pan-y",
-          cursor: canDrag ? (dragging ? "grabbing" : "grab") : "default",
-          userSelect: dragging ? "none" : "auto",
-        }}
+        $hovered={articleHovered}
+        $canDrag={canDrag}
+        $dragging={dragging}
       >
-        <div
+        <ArticleTrack
           style={{
-            display: "flex",
             width: `${articles.length * 100}%`,
             transform: `translateX(calc(${-articleIndex * (100 / articles.length)}% + ${dragX}px))`,
             transition: dragging
@@ -246,277 +403,79 @@ export default function HeroSection() {
               : "transform 0.3s cubic-bezier(0.22,1,0.36,1)",
           }}
         >
-          {articles.map((a) => (
-            <div
-              key={a.href}
-              style={{ flex: `0 0 ${100 / articles.length}%`, minWidth: 0 }}
-            >
-              {/* Desktop layout */}
-              <div
-                className="article-bar__desktop"
-                style={{
-                  maxWidth: 1244,
-                  margin: "0 auto",
-                  padding: "0 var(--section-px)",
-                }}
-              >
-                <a
+          {articles.map((a: { href: string; badge: string; source: string; title: string; cta: string }) => (
+            <ArticleSlide key={a.href} style={{ flex: `0 0 ${100 / articles.length}%` }}>
+              <ArticleDesktop>
+                <ArticleLink
                   href={a.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   draggable={false}
                   onClick={handleArticleLinkClick}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 16,
-                    textDecoration: "none",
-                  }}
                 >
-                  <span
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      padding: "4px 8px",
-                      borderRadius: 2,
-                      background: "#E1F5EE",
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 10,
-                      fontWeight: 500,
-                      color: "#1A7A6E",
-                      letterSpacing: "0.8px",
-                      textTransform: "uppercase",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {a.badge}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 11,
-                      color: "rgba(255,255,255,0.35)",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {a.source}
-                  </span>
-                  <div
-                    style={{
-                      width: 1,
-                      height: 14,
-                      background: "rgba(255,255,255,0.15)",
-                      flexShrink: 0,
-                    }}
-                  />
-                  <p
-                    style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 13,
-                      color: "rgba(255,255,255,0.60)",
-                      lineHeight: "19.5px",
-                      flex: 1,
-                      minWidth: 0,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                    }}
-                  >
-                    {a.title}
-                  </p>
-                  <span
-                    style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 13,
-                      fontWeight: 500,
-                      color: articleHovered ? "#5ECCC3" : "#FAFAFA",
-                      opacity: articleHovered ? 1 : 0.85,
-                      whiteSpace: "nowrap",
-                      flexShrink: 0,
-                      transition: "color 0.2s ease, opacity 0.2s ease",
-                    }}
-                  >
-                    {a.cta}
-                  </span>
-                </a>
-              </div>
+                  <ArticleBadge>{a.badge}</ArticleBadge>
+                  <ArticleSource>{a.source}</ArticleSource>
+                  <ArticleDivider />
+                  <ArticleTitle>{a.title}</ArticleTitle>
+                  <ArticleCta $hovered={articleHovered}>{a.cta}</ArticleCta>
+                </ArticleLink>
+              </ArticleDesktop>
 
-              {/* Mobile layout */}
-              <div
-                className="article-bar__mobile"
-                style={{
-                  maxWidth: 1244,
-                  margin: "0 auto",
-                  padding: "0 var(--section-px)",
-                }}
-              >
-                <a
+              <ArticleMobile>
+                <ArticleLink
+                  as="a"
                   href={a.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   draggable={false}
                   onClick={handleArticleLinkClick}
-                  style={{ textDecoration: "none", display: "block" }}
+                  style={{ display: "block" }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      marginBottom: 8,
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        padding: "3px 7px",
-                        borderRadius: 2,
-                        background: "#E1F5EE",
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: 9,
-                        fontWeight: 500,
-                        color: "#1A7A6E",
-                        letterSpacing: "0.7px",
-                        textTransform: "uppercase",
-                        flexShrink: 0,
-                      }}
-                    >
-                      {a.badge}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: 11,
-                        color: "rgba(255,255,255,0.35)",
-                      }}
-                    >
-                      {a.source}
-                    </span>
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 13,
-                      color: "rgba(255,255,255,0.65)",
-                      lineHeight: 1.5,
-                      marginBottom: 10,
-                    }}
-                  >
-                    {a.title}
-                  </p>
-                  <span
-                    style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 13,
-                      fontWeight: 500,
-                      color: "#5ECCC3",
-                    }}
-                  >
-                    {a.cta}
-                  </span>
-                </a>
-              </div>
-            </div>
+                  <MobileArticleHeader>
+                    <MobileArticleBadge>{a.badge}</MobileArticleBadge>
+                    <MobileArticleSource>{a.source}</MobileArticleSource>
+                  </MobileArticleHeader>
+                  <MobileArticleTitle>{a.title}</MobileArticleTitle>
+                  <MobileArticleCta>{a.cta}</MobileArticleCta>
+                </ArticleLink>
+              </ArticleMobile>
+            </ArticleSlide>
           ))}
-        </div>
+        </ArticleTrack>
 
         {canDrag && (
-          <div
-            style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
-          >
-            <div
-              style={{
-                maxWidth: 1244,
-                height: "100%",
-                margin: "0 auto",
-                padding: "0 var(--section-px)",
-                position: "relative",
-              }}
-            >
-              <button
+          <ArrowsWrapper>
+            <ArrowsInner>
+              <ArrowButton
                 aria-label="Artigo anterior"
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() =>
-                  setArticleIndex(
-                    (i) => (i - 1 + articles.length) % articles.length,
-                  )
+                  setArticleIndex((i) => (i - 1 + articles.length) % articles.length)
                 }
                 onMouseEnter={() => setHoveredArrow("left")}
                 onMouseLeave={() => setHoveredArrow(null)}
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  pointerEvents: "auto",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 6,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  opacity:
-                    hoveredArrow === "left" ? 1 : articleHovered ? 0.55 : 0.3,
-                  transition: "opacity 0.2s ease",
-                }}
+                $direction="left"
+                $hoveredArrow={hoveredArrow}
+                $articleHovered={articleHovered}
               >
                 <ChevronIcon direction="left" />
-              </button>
-              <button
+              </ArrowButton>
+              <ArrowButton
                 aria-label="Próximo artigo"
                 onPointerDown={(e) => e.stopPropagation()}
-                onClick={() =>
-                  setArticleIndex((i) => (i + 1) % articles.length)
-                }
+                onClick={() => setArticleIndex((i) => (i + 1) % articles.length)}
                 onMouseEnter={() => setHoveredArrow("right")}
                 onMouseLeave={() => setHoveredArrow(null)}
-                style={{
-                  position: "absolute",
-                  right: 0,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  pointerEvents: "auto",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 6,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  opacity:
-                    hoveredArrow === "right" ? 1 : articleHovered ? 0.55 : 0.3,
-                  transition: "opacity 0.2s ease",
-                }}
+                $direction="right"
+                $hoveredArrow={hoveredArrow}
+                $articleHovered={articleHovered}
               >
                 <ChevronIcon direction="right" />
-              </button>
-            </div>
-          </div>
+              </ArrowButton>
+            </ArrowsInner>
+          </ArrowsWrapper>
         )}
-      </div>
-
-      <style>{`
-        .article-bar__mobile { display: none; }
-        .article-bar__desktop { display: block; }
-
-        @media (max-width: 768px) {
-          #produtos > div[style*="grid"] {
-            grid-template-columns: 1fr !important;
-            padding-bottom: 40px !important;
-          }
-          #produtos > div[style*="grid"] p {
-            margin-left: 0 !important;
-          }
-          .article-bar__desktop { display: none !important; }
-          .article-bar__mobile  { display: block !important; }
-          .article-bar { padding: 16px 0 !important; }
-        }
-      `}</style>
-    </section>
+      </ArticleBar>
+    </Section>
   );
 }
-

@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
-export function useReveal({ delay = 0, y = 18 } = {}) {
-  const ref = useRef(null)
+interface UseRevealOptions {
+  delay?: number
+  y?: number
+}
+
+export function useReveal<T extends HTMLElement = HTMLDivElement>({ delay = 0, y = 18 }: UseRevealOptions = {}) {
+  const ref = useRef<T | null>(null)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {

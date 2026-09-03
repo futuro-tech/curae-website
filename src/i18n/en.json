@@ -257,52 +257,5 @@
       "role": "",
       "bio": "Graduated in Medicine from the Federal University of Pernambuco (UFPE), she completed her medical residency in Pediatrics at the Instituto Materno Infantil Fernando Figueira (IMIP) and a specialization in Anatomy at Santa Casa de Misericórdia. She currently works as a staff physician in the Neonatal ICU at Hospital Memorial São José and is part of the technical group of the Municipal Child Health Care Policy Coordination. Throughout her career, she dedicated around 20 years to Hospital Esperança, where she also served as a staff physician in the neonatal ICU, building extensive experience in maternal and child healthcare."
     }
-  ],
-  "PRODUCTS_TEXT": [
-    {
-      "id": "bloco",
-      "name": "Surgical Suite Efficiency",
-      "badge": "+31% Utilization",
-      "category": "+ HOSPITAL OPERATIONS",
-      "heading": "Increase surgical throughput by identifying operational bottlenecks",
-      "description": "An autonomous computer vision platform that generates performance insights from image-based monitoring of surgical center operations.",
-      "bullets": ["Minimize delays and rescheduling.", "Improve operational visibility."]
-    },
-    {
-      "id": "risco",
-      "name": "Risk-Based Patient Prioritization",
-      "badge": "94.7% Sensitivity",
-      "category": "+ HOSPITAL OPERATIONS",
-      "heading": "Improve patient prioritization with continuously learning system",
-      "description": "AI model for dynamic patient prioritization based on clinical, demographic, and regulatory data integrated with the hospital information system.",
-      "bullets": ["Automatically updates priorities and criteria without manual intervention", "Reduces risk classification errors"]
-    },
-    {
-      "id": "endometriose",
-      "name": "AI-Assisted Endometriosis Detection",
-      "badge": "−43% Mortality",
-      "category": "+ DIAGNOSTIC SUPPORT",
-      "heading": "Detect signs of endometriosis up to 2 years earlier",
-      "description": "AI model for early identification of patterns associated with endometriosis from gynecological ultrasound images.",
-      "bullets": ["Provides an additional layer of diagnostic confidence.", "Enables earlier identification from the first ultrasound examination."]
-    },
-    {
-      "id": "voz",
-      "name": "Voice-Based Cancer Screening",
-      "badge": "6× Faster",
-      "category": "+ DIAGNOSTIC SUPPORT",
-      "heading": "Identify head and neck cancer risk earlier through voice analysis",
-      "description": "Risk classification model based on vocal patterns associated with head and neck cancer.",
-      "bullets": ["Supports initial clinical assessment.", "Enables faster screening without invasive procedures."]
-    },
-    {
-      "id": "ludopatia",
-      "name": "Problem Gambling Risk Detection",
-      "badge": "2.4× Anticipation",
-      "category": "+ MENTAL HEALTH",
-      "heading": "Anticipate gambling addiction risk and support public health initiatives",
-      "description": "Predictive model based on behavioral patterns associated with gambling addiction risk.",
-      "bullets": ["Supports more targeted public health interventions.", "Categorizes populations according to risk levels."]
-    }
   ]
 }

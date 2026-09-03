@@ -1,30 +1,224 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import styled from 'styled-components'
 import CuraeLogo from '../components/CuraeLogo'
 import { useLang } from '../context/LangContext'
+import { tokens } from '../components/styled'
 
-function LangToggle({ lang, setLang, dark }) {
-  const base = { background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontSize: 12, padding: '2px 5px', transition: 'color 0.15s' }
-  const active = dark ? '#FAFAFA' : '#0D1B2A'
-  const inactive = dark ? 'rgba(255,255,255,0.35)' : '#9AA5B1'
+const Nav = styled.nav<{ $scrolled: boolean }>`
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: var(--nav-h);
+  background: rgba(250, 250, 250, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 0.5px solid ${tokens.border};
+  box-shadow: ${props => props.$scrolled ? '0 1px 12px rgba(13,27,42,0.06)' : 'none'};
+  transition: box-shadow 0.2s;
+`
+
+const NavInner = styled.div`
+  max-width: 1244px;
+  margin: 0 auto;
+  padding: 0 var(--section-px);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
+const NavDesktopLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 32px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`
+
+const NavLink = styled.a`
+  position: relative;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: ${tokens.text};
+  line-height: 21px;
+  transition: color 0.15s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 1px;
+    background: ${tokens.navy};
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  &:hover {
+    color: ${tokens.navy};
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+`
+
+const RightGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`
+
+const CTAButton = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 4px;
+  background: ${tokens.navy};
+  color: ${tokens.offWhite};
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 22.5px;
+  white-space: nowrap;
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    background: ${tokens.hoverNavy};
+    transform: scale(1.04);
+    box-shadow: 0 6px 16px rgba(13,27,42,0.18);
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`
+
+const Hamburger = styled.button`
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+`
+
+const HamburgerBar = styled.span<{ $menuOpen: boolean; $index: number }>`
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: ${tokens.navy};
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+  transform: ${props => {
+    if (!props.$menuOpen) return 'none'
+    if (props.$index === 1) return 'scaleX(0)'
+    return props.$index === 0 ? 'translateY(7px) rotate(45deg)' : 'translateY(-7px) rotate(-45deg)'
+  }};
+  opacity: ${props => (props.$menuOpen && props.$index === 1) ? 0 : 1};
+`
+
+const MobileMenu = styled.div`
+  position: absolute;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  background: rgba(250,250,250,0.98);
+  backdrop-filter: blur(8px);
+  border-bottom: 0.5px solid ${tokens.border};
+  padding: 24px var(--section-px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`
+
+const MobileLink = styled.a`
+  font-size: 16px;
+  color: ${tokens.text};
+  font-weight: 400;
+`
+
+const MobileCTAButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 4px;
+  background: ${tokens.navy};
+  color: ${tokens.offWhite};
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+`
+
+const LangToggleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const LangItem = styled.span`
+  display: flex;
+  align-items: center;
+`
+
+const LangSeparator = styled.span<{ $dark: boolean }>`
+  color: ${props => props.$dark ? 'rgba(255,255,255,0.2)' : tokens.border};
+  font-size: 11px;
+  margin: 0 2px;
+`
+
+const LangButton = styled.button<{ $active: boolean; $dark: boolean }>`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  padding: 2px 5px;
+  transition: color 0.15s;
+  font-weight: ${props => props.$active ? 600 : 400};
+  color: ${props => {
+    if (props.$active) return props.$dark ? tokens.offWhite : tokens.navy
+    return props.$dark ? 'rgba(255,255,255,0.35)' : tokens.muted
+  }};
+`
+
+interface NavLinkItem {
+  label: string
+  href: string
+}
+
+interface LangToggleProps {
+  lang: string
+  setLang: (l: 'pt' | 'en') => void
+  dark: boolean
+}
+
+function LangToggle({ lang, setLang, dark }: LangToggleProps) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+    <LangToggleWrapper>
       {['pt', 'en'].map((l, i) => (
-        <span key={l} style={{ display: 'flex', alignItems: 'center' }}>
-          {i > 0 && <span style={{ color: dark ? 'rgba(255,255,255,0.2)' : '#D1D9E0', fontSize: 11, margin: '0 2px' }}>|</span>}
-          <button
-            onClick={() => setLang(l)}
-            style={{ ...base, fontWeight: lang === l ? 600 : 400, color: lang === l ? active : inactive }}
-          >
+        <LangItem key={l}>
+          {i > 0 && <LangSeparator $dark={dark}>|</LangSeparator>}
+          <LangButton onClick={() => setLang(l as 'pt' | 'en')} $active={lang === l} $dark={dark}>
             {l.toUpperCase()}
-          </button>
-        </span>
+          </LangButton>
+        </LangItem>
       ))}
-    </div>
+    </LangToggleWrapper>
   )
 }
 
-function resolveTo(href, isHome) {
+function resolveTo(href: string, isHome: boolean) {
   if (href.startsWith('#')) return isHome ? href : `/${href}`
   return href
 }
@@ -44,155 +238,59 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav style={{
-      position: 'fixed',
-      top: 0,
-      zIndex: 100,
-      width: '100%',
-      height: 64,
-      background: 'rgba(250, 250, 250, 0.92)',
-      backdropFilter: 'blur(8px)',
-      borderBottom: '0.5px solid #D1D9E0',
-      boxShadow: scrolled ? '0 1px 12px rgba(13,27,42,0.06)' : 'none',
-      transition: 'box-shadow 0.2s',
-    }}>
-      <div style={{
-        maxWidth: 1244,
-        margin: '0 auto',
-        padding: '0 var(--section-px)',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}>
+    <Nav $scrolled={scrolled}>
+      <NavInner>
         <Link to="/" aria-label="Curae">
           <CuraeLogo variant="dark" />
         </Link>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }} className="nav-desktop">
-          {NAV.links.map(link => {
+        <NavDesktopLinks>
+          {NAV.links.map((link: NavLinkItem) => {
             const to = resolveTo(link.href, isHome)
-            const style = { fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 400, color: '#4A5568', lineHeight: '21px' }
             return to.startsWith('#') ? (
-              <a key={link.label} href={to} className="nav-link" style={style}>{link.label}</a>
+              <NavLink key={link.label} as="a" href={to}>{link.label}</NavLink>
             ) : (
-              <Link key={link.label} to={to} className="nav-link" style={style}>{link.label}</Link>
+              <NavLink key={link.label} as={Link} to={to}>{link.label}</NavLink>
             )
           })}
-        </div>
+        </NavDesktopLinks>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <RightGroup>
           <LangToggle lang={lang} setLang={setLang} dark={false} />
 
-          <a
-            href={t.CTA_CONTENT.button.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="nav-desktop"
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              padding: '10px 20px', borderRadius: 4, background: '#0D1B2A',
-              color: '#FAFAFA', fontFamily: "'DM Sans', sans-serif",
-              fontSize: 15, fontWeight: 500, lineHeight: '22.5px',
-              whiteSpace: 'nowrap', transition: 'background 0.15s, transform 0.15s, box-shadow 0.15s',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background = '#1a2f45'
-              e.currentTarget.style.transform = 'scale(1.04)'
-              e.currentTarget.style.boxShadow = '0 6px 16px rgba(13,27,42,0.18)'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = '#0D1B2A'
-              e.currentTarget.style.transform = 'scale(1)'
-              e.currentTarget.style.boxShadow = 'none'
-            }}
-          >
+          <CTAButton href={t.CTA_CONTENT.button.href} target="_blank" rel="noopener noreferrer">
             {NAV.cta}
-          </a>
+          </CTAButton>
 
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Menu"
-            className="nav-hamburger"
-            style={{ display: 'none', flexDirection: 'column', gap: 5, padding: 4 }}
-          >
+          <Hamburger onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
             {[0, 1, 2].map(i => (
-              <span key={i} style={{
-                display: 'block', width: 22, height: 2,
-                background: '#0D1B2A', borderRadius: 2,
-                transition: 'transform 0.2s, opacity 0.2s',
-                transform: menuOpen
-                  ? i === 1 ? 'scaleX(0)' : i === 0 ? 'translateY(7px) rotate(45deg)' : 'translateY(-7px) rotate(-45deg)'
-                  : 'none',
-                opacity: menuOpen && i === 1 ? 0 : 1,
-              }} />
+              <HamburgerBar key={i} $menuOpen={menuOpen} $index={i} />
             ))}
-          </button>
-        </div>
-      </div>
+          </Hamburger>
+        </RightGroup>
+      </NavInner>
 
       {menuOpen && (
-        <div style={{
-          position: 'absolute', top: 64, left: 0, right: 0,
-          background: 'rgba(250,250,250,0.98)', backdropFilter: 'blur(8px)',
-          borderBottom: '0.5px solid #D1D9E0',
-          padding: '24px var(--section-px)',
-          display: 'flex', flexDirection: 'column', gap: 20,
-        }}>
-          {NAV.links.map(link => {
+        <MobileMenu>
+          {NAV.links.map((link: NavLinkItem) => {
             const to = resolveTo(link.href, isHome)
-            const style = { fontSize: 16, color: '#4A5568', fontWeight: 400 }
             return to.startsWith('#') ? (
-              <a key={link.label} href={to} onClick={() => setMenuOpen(false)} style={style}>{link.label}</a>
+              <MobileLink key={link.label} as="a" href={to} onClick={() => setMenuOpen(false)}>{link.label}</MobileLink>
             ) : (
-              <Link key={link.label} to={to} onClick={() => setMenuOpen(false)} style={style}>{link.label}</Link>
+              <MobileLink key={link.label} as={Link} to={to} onClick={() => setMenuOpen(false)}>{link.label}</MobileLink>
             )
           })}
-          <a
+          <MobileCTAButton
             href={t.CTA_CONTENT.button.href}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
-            style={{
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              padding: '12px 20px', borderRadius: 4, background: '#0D1B2A',
-              color: '#FAFAFA', fontFamily: "'DM Sans', sans-serif",
-              fontSize: 15, fontWeight: 500, textAlign: 'center',
-            }}
           >
             {NAV.cta}
-          </a>
+          </MobileCTAButton>
           <LangToggle lang={lang} setLang={setLang} dark={false} />
-        </div>
+        </MobileMenu>
       )}
-
-      <style>{`
-        .nav-link {
-          position: relative;
-          transition: color 0.15s;
-        }
-        .nav-link::after {
-          content: '';
-          position: absolute;
-          left: 0; right: 0; bottom: -4px;
-          height: 1px;
-          background: #0D1B2A;
-          transform: scaleX(0);
-          transform-origin: left;
-          transition: transform 0.25s ease;
-        }
-        .nav-link:hover {
-          color: #0D1B2A;
-        }
-        .nav-link:hover::after {
-          transform: scaleX(1);
-        }
-
-        @media (max-width: 768px) {
-          .nav-desktop { display: none !important; }
-          .nav-hamburger { display: flex !important; }
-        }
-      `}</style>
-    </nav>
+    </Nav>
   )
 }

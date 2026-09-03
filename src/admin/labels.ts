@@ -86,8 +86,8 @@ const LABELS = {
   filter: 'Filtro CSS',
 }
 
-export function labelFor(key) {
-  if (LABELS[key]) return LABELS[key]
+export function labelFor(key: string): string {
+  if (key in LABELS) return LABELS[key as keyof typeof LABELS]
   const spaced = key
     .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
     .replace(/_/g, ' ')

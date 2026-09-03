@@ -1,127 +1,252 @@
 import { useState } from 'react'
+import styled from 'styled-components'
 import { useLang } from '../context/LangContext'
 import PRODUCT_GROUPS from '../data/productGroups.json'
 import { useReveal } from '../hooks/useReveal'
+import { Section, Container, tokens } from '../components/styled'
 
-function BenefitCapsule({ icon, text, bg }) {
+const Capsule = styled.div<{ $bg: string; $hovered: boolean }>`
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px;
+  border-radius: 6px;
+  background: ${props => props.$bg};
+  width: 100%;
+  max-width: 300px;
+  transform: ${props => props.$hovered ? 'translateY(-2px)' : 'translateY(0)'};
+  box-shadow: ${props => props.$hovered ? '0 6px 16px rgba(13,27,42,0.08)' : 'none'};
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+`
+
+const CapsuleIcon = styled.img<{ $hovered: boolean }>`
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  transform: ${props => props.$hovered ? 'scale(1.1)' : 'scale(1)'};
+  transition: transform 0.2s ease;
+`
+
+const CapsuleText = styled.span`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: ${tokens.text};
+`
+
+const ProductRowWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  flex-wrap: wrap;
+`
+
+const ProductInfo = styled.div`
+  flex: 1 1 300px;
+  min-width: 260px;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`
+
+const ProductName = styled.h3`
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #000;
+`
+
+const ProductHeading = styled.h4`
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: #000;
+`
+
+const ProductDescription = styled.p`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: ${tokens.text};
+  max-width: 330px;
+`
+
+const BenefitsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-end;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 300px;
+`
+
+const Divider = styled.div`
+  height: 1px;
+  background: #C0CBD4;
+  opacity: 0.4;
+  margin-bottom: 32px;
+`
+
+const ProductsGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+`
+
+const ProductsListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`
+
+const ProductGroupCard = styled.div`
+  border: 0.5px solid ${tokens.border};
+  border-radius: 8px;
+  background: #fff;
+  padding: clamp(24px, 4vw, 36px) clamp(20px, 4vw, 40px);
+`
+
+const GroupBadge = styled.span<{ $bg: string; $text: string }>`
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 2px;
+  background: ${props => props.$bg};
+  color: ${props => props.$text};
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+`
+
+const HeadingSection = styled.div`
+  text-align: center;
+  margin-bottom: 56px;
+`
+
+const SectionHeading = styled.h2`
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(30px, 4.5vw, 42px);
+  line-height: 1.2;
+  color: ${tokens.navy};
+`
+
+const HeadingLight = styled.span`
+  font-weight: 300;
+`
+
+const HeadingBold = styled.span`
+  font-weight: 700;
+`
+
+const Subheading = styled.p`
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: ${tokens.text};
+  margin-top: 16px;
+`
+
+interface Benefit {
+  icon: string
+  text: string
+}
+
+interface ProductGroup {
+  id: string
+  badge: string
+  bg: string
+  text: string
+  products: Product[]
+}
+
+interface Product {
+  id: string
+  name: string
+  heading: string
+  description: string
+  benefits: Benefit[]
+}
+
+function BenefitCapsule({ icon, text, bg }: { icon: string; text: string; bg: string }) {
   const [hovered, setHovered] = useState(false)
   return (
-    <div
+    <Capsule
+      $hovered={hovered}
+      $bg={bg}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'flex', alignItems: 'flex-start', gap: 16,
-        padding: 12, borderRadius: 6, background: bg,
-        width: '100%', maxWidth: 300,
-        transform: hovered ? 'translateY(-2px)' : 'translateY(0)',
-        boxShadow: hovered ? '0 6px 16px rgba(13,27,42,0.08)' : 'none',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-      }}
     >
-      <img src={icon} alt="" style={{
-        width: 27, height: 27, flexShrink: 0,
-        transform: hovered ? 'scale(1.1)' : 'scale(1)',
-        transition: 'transform 0.2s ease',
-      }} />
-      <span style={{
-        fontFamily: "'DM Sans', sans-serif",
-        fontSize: 15, fontWeight: 300, lineHeight: 1.7,
-        color: '#4A5568',
-      }}>
-        {text}
-      </span>
-    </div>
+      <CapsuleIcon src={icon} alt="" $hovered={hovered} />
+      <CapsuleText>{text}</CapsuleText>
+    </Capsule>
   )
 }
 
-function ProductRow({ product, group }) {
+function ProductRow({ product, group }: { product: Product; group: ProductGroup }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: '1 1 300px', minWidth: 260, maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, color: '#000' }}>
-          {product.name}
-        </h3>
-        <h4 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 400, lineHeight: 1.15, color: '#000' }}>
-          {product.heading}
-        </h4>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15.5, lineHeight: 1.6, color: '#4A5568', maxWidth: 330 }}>
-          {product.description}
-        </p>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-end', flex: '0 0 auto', width: '100%', maxWidth: 300 }}>
-        {product.benefits.map(b => (
+    <ProductRowWrapper>
+      <ProductInfo>
+        <ProductName>{product.name}</ProductName>
+        <ProductHeading>{product.heading}</ProductHeading>
+        <ProductDescription>{product.description}</ProductDescription>
+      </ProductInfo>
+      <BenefitsContainer>
+        {product.benefits.map((b: Benefit) => (
           <BenefitCapsule key={b.text} icon={b.icon} text={b.text} bg={group.bg} />
         ))}
-      </div>
-    </div>
+      </BenefitsContainer>
+    </ProductRowWrapper>
   )
 }
 
-function ProductGroupCard({ group, index }) {
+function ProductGroupCardComponent({ group, index }: { group: ProductGroup; index: number }) {
   const reveal = useReveal({ delay: index * 0.08 })
   return (
-    <div ref={reveal.ref} style={{
-      border: '0.5px solid #D1D9E0', borderRadius: 8, background: '#FFF',
-      padding: 'clamp(24px, 4vw, 36px) clamp(20px, 4vw, 40px)',
-      ...reveal.style,
-    }}>
-      <span style={{
-        display: 'inline-flex', padding: '4px 10px', borderRadius: 2,
-        background: group.bg, color: group.text,
-        fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500,
-        letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 24,
-      }}>
-        {group.badge}
-      </span>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-        {group.products.map((p, i) => (
+    <ProductGroupCard ref={reveal.ref} style={reveal.style}>
+      <GroupBadge $bg={group.bg} $text={group.text}>{group.badge}</GroupBadge>
+      <ProductsGrid>
+        {group.products.map((p: Product, i: number) => (
           <div key={p.id}>
-            {i > 0 && <div style={{ height: 1, background: '#C0CBD4', opacity: 0.4, marginBottom: 32 }} />}
+            {i > 0 && <Divider />}
             <ProductRow product={p} group={group} />
           </div>
         ))}
-      </div>
-    </div>
+      </ProductsGrid>
+    </ProductGroupCard>
   )
 }
 
-export default function ProductsSection() {
+export default function ProductsSection({ productGroups }: { productGroups?: typeof PRODUCT_GROUPS } = {}) {
   const { t, lang } = useLang()
   const { heading, subheading } = t.PRODUCTS_SECTION
-  const groups = lang === 'pt' ? PRODUCT_GROUPS.pt : PRODUCT_GROUPS.en
+  const groups = lang === 'pt' ? (productGroups ?? PRODUCT_GROUPS).pt : (productGroups ?? PRODUCT_GROUPS).en
   const headingReveal = useReveal()
 
   return (
-    <section id="produtos-section" style={{
-      background: '#EEF2F5',
-      padding: 'clamp(72px, 10vw, 120px) var(--section-px)',
-    }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div ref={headingReveal.ref} style={{ textAlign: 'center', marginBottom: 56, ...headingReveal.style }}>
-          <h2 style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(30px, 4.5vw, 42px)',
-            lineHeight: 1.2,
-            color: '#0D1B2A',
-          }}>
-            <span style={{ fontWeight: 300 }}>{heading.before}</span>
-            <span style={{ fontWeight: 700 }}>{heading.emphasis}</span>
+    <Section id="produtos-section" bg="lightGrey" spacing="lg">
+      <Container maxWidth="wide">
+        <HeadingSection ref={headingReveal.ref} style={headingReveal.style}>
+          <SectionHeading>
+            <HeadingLight>{heading.before}</HeadingLight>
+            <HeadingBold>{heading.emphasis}</HeadingBold>
             {heading.end}
-          </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 18, fontWeight: 400, color: '#4A5568', marginTop: 16,
-          }}>
-            {subheading}
-          </p>
-        </div>
+          </SectionHeading>
+          <Subheading>{subheading}</Subheading>
+        </HeadingSection>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          {groups.map((group, i) => (
-            <ProductGroupCard key={group.id} group={group} index={i} />
+        <ProductsListWrapper>
+          {groups.map((group: ProductGroup, i: number) => (
+            <ProductGroupCardComponent key={group.id} group={group} index={i} />
           ))}
-        </div>
-      </div>
-    </section>
+        </ProductsListWrapper>
+      </Container>
+    </Section>
   )
 }

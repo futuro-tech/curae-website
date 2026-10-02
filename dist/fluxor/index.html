@@ -1,4 +1,15 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style data-page="transicoes">
+/* transição suave entre páginas (Chrome, Edge e Safari; nos demais a navegação é normal) */
+@view-transition{navigation:auto}
+.site-nav{view-transition-name:site-nav}
+::view-transition-old(root){animation:vt-out .18s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:vt-in .32s cubic-bezier(.25,.8,.25,1) both}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0;transform:translateY(10px)}}
+.site-nav__links a[aria-current="page"]::after{right:0}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
+</style>
+</head><body>
 <!doctype html><html lang="pt-BR"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style data-foot="">
 footer.site-foot .site-foot__top{grid-template-columns:minmax(0,4fr) repeat(3,minmax(0,2.4fr))}
 .site-foot address{font-style:normal;padding-top:7px}
@@ -794,13 +805,27 @@ a{color:inherit}
     <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
     <nav class="site-nav__links" id="menu" aria-label="Navegação principal">
       <a href="/#produtos">Produtos</a>
-      <a href="/fluxor/">Sala de Cirurgia</a>
+      <a href="/fluxor/" aria-current="page">Sala de Cirurgia</a>
       <a href="/allocare/">Filas</a>
       <a href="/carreiras/">Carreiras</a>
     </nav>
     <a class="site-nav__cta" href="/contato/#assunto=fluxor">Agende uma conversa</a>
   </div>
 </header>
+<script data-page="">
+/* navbar do site: menu no celular */
+(function(){
+  var b=document.querySelector('.site-nav__toggle'),m=document.getElementById('menu');
+  if(!b||!m)return;
+  b.addEventListener('click',function(){
+    var open=m.classList.toggle('is-open');
+    b.setAttribute('aria-expanded',open?'true':'false');
+  });
+  m.addEventListener('click',function(e){
+    if(e.target.tagName==='A'){m.classList.remove('is-open');b.setAttribute('aria-expanded','false');}
+  });
+})();
+</script>
 
 <main id="conteudo">
 

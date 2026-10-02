@@ -15,7 +15,9 @@ footer.site-foot .site-foot__top{grid-template-columns:minmax(0,4fr) repeat(3,mi
 .site-foot address{font-style:normal;padding-top:7px}
 footer.site-foot .site-foot__legal{align-items:center}
 @media (max-width:980px){footer.site-foot .site-foot__top{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 32px}footer.site-foot .site-foot__brand{grid-column:1/-1}}
-@media (max-width:560px){footer.site-foot .site-foot__top{grid-template-columns:repeat(2,minmax(0,1fr))}footer.site-foot .site-foot__addr{grid-column:1/-1}}
+@media (max-width:560px){footer.site-foot .site-foot__top{grid-template-columns:repeat(2,minmax(0,1fr))}footer.site-foot .site-foot__addr{grid-column:1/-1}
+.site-foot__addr a{text-decoration:none;transition:color .2s}
+.site-foot__addr a:hover{color:#fff;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}}
 footer.site-foot .site-foot__legal p{max-width:none}
 </style>
 </head><body>
@@ -1391,7 +1393,7 @@ a{color:inherit}
       </nav>
       <div class="site-foot__addr">
         <h3>Endereço</h3>
-        <address>Rua Madre de Deus, 300<br>1º&nbsp;andar<br>Recife Antigo, Recife, PE</address>
+        <address><a href="https://www.google.com/maps/search/?api=1&amp;query=Rua%20Madre%20de%20Deus%2C%20300%2C%20Recife%20Antigo%2C%20Recife%20-%20PE%2C%20Brasil" target="_blank" rel="noopener" aria-label="Abrir endereço no mapa: Rua Madre de Deus, 300, Recife Antigo, Recife, PE">Rua Madre de Deus, 300<br>1º&nbsp;andar<br>Recife Antigo, Recife, PE</a></address>
       </div>
     </div>
 

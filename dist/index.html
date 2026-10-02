@@ -466,6 +466,26 @@ a{color:inherit}
 .h-pil .mx{display:grid;grid-template-columns:repeat(3,7px);gap:3px;margin-bottom:8px}
 .h-pil .mx i{width:7px;height:7px;background:var(--line)}
 .h-pil .mx i.on{background:var(--blue)}
+/* pilares: o fio de acento se desenha e a matriz 3×3 surge em onda diagonal,
+   depois os quadrados "ligados" acendem em azul. Só com .js-fit (JS ativo e sem "reduzir movimento"). */
+.h-pil .mx i:nth-child(1){--g:0}.h-pil .mx i:nth-child(2),.h-pil .mx i:nth-child(4){--g:1}
+.h-pil .mx i:nth-child(3),.h-pil .mx i:nth-child(5),.h-pil .mx i:nth-child(7){--g:2}
+.h-pil .mx i:nth-child(6),.h-pil .mx i:nth-child(8){--g:3}.h-pil .mx i:nth-child(9){--g:4}
+.js-fit .h-pil li::before{transform:scaleX(0);transform-origin:left center;
+  transition:transform .9s var(--ease-soft) calc(var(--d,0ms) + 250ms),width .6s var(--ease-soft)}
+.js-fit .h-pil li.in::before{transform:none}
+.js-fit .h-pil .mx i{transform:scale(0);
+  transition:transform .5s var(--ease-soft) calc(var(--d,0ms) + 300ms + var(--g)*70ms),
+             background-color .4s var(--ease-out) calc(var(--d,0ms) + 750ms + var(--g)*90ms)}
+.js-fit .h-pil .mx i.on{background:var(--line)}
+.js-fit .h-pil li.in .mx i{transform:none}
+.js-fit .h-pil li.in .mx i.on{background:var(--blue)}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .h-pil li::before{transition:width .6s var(--ease-soft)}
+  .h-pil li:hover::before{width:100%}
+  .h-pil li.in:hover .mx i{animation:mx-wave .7s var(--ease-soft) calc(var(--g)*70ms)}
+}
+@keyframes mx-wave{40%{transform:scale(.45)}100%{transform:none}}
 .h-team{margin-top:clamp(72px,9vw,128px);padding-top:clamp(48px,6vw,72px);border-top:1px solid var(--line);
   display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(32px,5vw,88px)}
 .h-team__t{font-size:clamp(1.3rem,2.2vw,1.75rem);line-height:1.2;letter-spacing:-.02em;font-weight:600;max-width:20ch}

@@ -312,8 +312,9 @@ footer.site-foot .site-foot__legal p{max-width:none}
       </div>
 
       <div class="fcard" id="formulario">
-        <!-- Envio por mailto (ver script do contato no fim da página). -->
+        <!-- Envio pelo FormSubmit (formsubmit.co), ver script do contato no fim da página. -->
         <form class="form" id="form" novalidate="">
+          <input type="text" name="_honey" id="f-honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
           <div class="f">
             <label for="f-nome">Nome<span class="req" aria-hidden="true">*</span></label>
             <input id="f-nome" aria-describedby="m-nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" required="">
@@ -358,13 +359,13 @@ footer.site-foot .site-foot__legal p{max-width:none}
           <div class="submit">
             <button class="btn btn--block cut-tr" type="submit" id="send"><span class="btn__t">Solicitar contato</span><span class="ar" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="square"><path d="M2 8h11M9 4l4 4-4 4"></path></svg></span></button>
           </div>
-          <p class="form-err" id="form-err" role="alert">Não foi possível enviar agora. Tente de novo em instantes.</p>
+          <p class="form-err" id="form-err" role="alert">Não foi possível enviar agora. Tente de novo em instantes ou escreva para <a href="mailto:contato@curaeai.tech">contato@curaeai.tech</a>.</p>
         </form>
 
         <div class="done" role="status" aria-live="polite">
           <span class="done__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
-          <h2>Sua mensagem está pronta.</h2>
-          <p>Abrimos seu e-mail com os dados preenchidos. É só enviar, e nossa equipe retorna pelo e-mail ou WhatsApp que você informou.</p>
+          <h2>Mensagem enviada.</h2>
+          <p>Recebemos seu contato. Nossa equipe retorna pelo e-mail ou WhatsApp que você informou.</p>
           <button class="linkbtn" type="button" id="again">Enviar outra mensagem</button>
         </div>
       </div>
@@ -429,7 +430,7 @@ footer.site-foot .site-foot__legal p{max-width:none}
    Envio por mailto: abre o e-mail de quem preenche com a mensagem pronta,
    igual ao site da Futuro Tech. */
 (function(){
-  /* destinatários do formulário */
+  /* destinatários do formulário (o primeiro recebe pelo FormSubmit, os demais vão em cópia) */
   var EMAIL=["contato@curaeai.tech"];
   var EMAIL_COPIA=["vinicius.xavier@futuroai.tech","adriana.falcao@futuroai.tech"];
   var HASH=window.__CURAE_HASH||(location.hash||"").slice(1);
@@ -473,13 +474,33 @@ footer.site-foot .site-foot__legal p{max-width:none}
       return (t?t.textContent.trim():c.value)+(g?" ("+g.textContent.trim()+")":"");
     });
     var assunto="Contato pelo site da Curae: "+val("f-empresa");
-    var corpo=["Nome: "+val("f-nome"),"Empresa: "+val("f-empresa"),"Cargo: "+val("f-cargo"),
-      "E-mail: "+val("f-email"),"Celular (WhatsApp): "+val("f-cel"),"","Assuntos:"].concat(temas.map(function(t){return "- "+t;})).join("\n");
-    var params="subject="+encodeURIComponent(assunto)+"&body="+encodeURIComponent(corpo);
-    if(EMAIL_COPIA.length) params="cc="+encodeURIComponent(EMAIL_COPIA.join(","))+"&"+params;
-    window.location.href="mailto:"+EMAIL.join(",")+"?"+params;
-    card.classList.add("is-sent");
-    card.scrollIntoView({block:"nearest"});
+    var hp=document.getElementById("f-honey");
+    if(hp&&hp.value){ card.classList.add("is-sent"); return; }
+    var btn=document.getElementById("send"),bt=btn?btn.querySelector(".btn__t"):null,label=bt?bt.textContent:"";
+    var err=document.getElementById("form-err");
+    if(err) err.classList.remove("is-on");
+    if(btn) btn.disabled=true; if(bt) bt.textContent="Enviando…";
+    var dados={
+      "Nome":val("f-nome"),"Empresa":val("f-empresa"),"Cargo":val("f-cargo"),
+      "email":val("f-email"),"Celular (WhatsApp)":val("f-cel"),"Assuntos":temas.join("; "),
+      _subject:assunto,_template:"table",_captcha:"false"
+    };
+    if(EMAIL_COPIA.length) dados._cc=EMAIL_COPIA.join(",");
+    fetch("https://formsubmit.co/ajax/"+EMAIL[0],{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify(dados)
+    }).then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){
+      if(!r.ok||String(j.success)!=="true") throw new Error(j.message||("HTTP "+r.status));
+    }); }).then(function(){
+      card.classList.add("is-sent");
+      card.scrollIntoView({block:"nearest"});
+    }).catch(function(x){
+      if(window.console) console.error("Falha no envio do formulário:",x);
+      if(err) err.classList.add("is-on");
+    }).then(function(){
+      if(btn) btn.disabled=false; if(bt) bt.textContent=label;
+    });
   });
   var again=document.getElementById("again");
   if(again) again.addEventListener("click",function(){

@@ -89,7 +89,7 @@ Se houver um site antigo no domínio, configure redirecionamentos 301 das URLs a
 
 ## Comportamentos que são intencionais
 
-- **Formulário de contato:** abre o app de e-mail do visitante (mailto). É provisório e será trocado depois.
+- **Formulário de contato:** envia pelo [FormSubmit](https://formsubmit.co) (gratuito, sem conta) para `contato@curaeai.tech`, com cópia para Vinicius e Adriana. **No primeiro envio depois de publicar, o FormSubmit manda um e-mail de ativação para `contato@curaeai.tech`: é preciso clicar em "Activate Form" uma única vez.** Até isso acontecer, as mensagens não chegam. Os destinatários ficam no início do script da página `contato/index.html` (`EMAIL` e `EMAIL_COPIA`).
 - **Botão "Baixar apresentação do produto" (Allocare e Fluxor):** recurso do site, baixa a apresentação embutida na página.
 - **Seções de depoimentos:** estão ocultas de propósito, porque ainda são placeholders. Não reativar.
 
@@ -106,4 +106,5 @@ Se houver um site antigo no domínio, configure redirecionamentos 301 das URLs a
 - [ ] As fontes carregaram (os títulos aparecem na Bricolage Grotesque, não numa fonte padrão do sistema).
 - [ ] Os links de candidatura em Carreiras abrem o Tally.
 - [ ] `https://curaeai.tech/og/curae-og.jpg` abre direto no navegador.
+- [ ] Envie um teste pelo formulário de contato, ative o FormSubmit pelo e-mail recebido em `contato@curaeai.tech` e envie outro teste para confirmar que chegou.
 - [ ] O preview do link aparece com a imagem ao colar no WhatsApp ou no LinkedIn.

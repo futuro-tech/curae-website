@@ -1,0 +1,109 @@
+# Site da Curae: instruções de publicação
+
+Site estático em HTML puro, com 5 páginas. Não tem build, banco de dados nem dependências para instalar: basta subir os arquivos como estão.
+
+**Tudo o que vai para o servidor está na pasta `dist/`.** Suba o *conteúdo* dela (não a pasta em si) para a raiz do domínio (no Hostinger/cPanel, a pasta `public_html`).
+
+## Estrutura (dentro de `dist/`)
+
+```
+.htaccess               → regras do servidor Apache (HTTPS, sem www, 404, compressão)
+index.html              → https://curaeai.tech/
+allocare/index.html     → https://curaeai.tech/allocare/
+fluxor/index.html       → https://curaeai.tech/fluxor/
+contato/index.html      → https://curaeai.tech/contato/
+carreiras/index.html    → https://curaeai.tech/carreiras/
+og/curae-og.jpg         → imagem de preview de links
+```
+
+Cada página é um arquivo único e autossuficiente. Imagens, ícones, CSS, JavaScript e animações estão todos embutidos dentro do próprio HTML. A única exceção é `og/curae-og.jpg`, a imagem de preview de links (veja "SEO e preview de links"). Os arquivos ficam entre 90 KB e 1,9 MB por causa das imagens embutidas, e isso é esperado.
+
+## URLs e links
+
+Todos os links internos usam caminho a partir da raiz e abrem na mesma aba: `/`, `/allocare/`, `/fluxor/`, `/contato/`, `/carreiras/`. Links externos (Tally, WhatsApp, LinkedIn, Futuro Tech) abrem em nova aba.
+
+As URLs sem a barra final (`/allocare`) também funcionam: servidores comuns redirecionam automaticamente para `/allocare/`.
+
+### Contato com assunto pré-selecionado
+
+A página de contato aceita um parâmetro na URL que já deixa marcado o assunto do formulário:
+
+| URL | Assunto marcado |
+|---|---|
+| `/contato/#assunto=fluxor` | Sala de cirurgia mais otimizada (FluxOR) |
+| `/contato/#assunto=allocare` | Priorização de pacientes (Allocare) |
+| `/contato/#assunto=parcerias` | Parcerias e eventos |
+| `/contato/#assunto=pesquisa` | Pesquisa |
+| `/contato/#assunto=carreiras` | Carreiras |
+| `/contato/#assunto=outros` | Outros |
+| `/contato/` | Nenhum (visitante escolhe) |
+
+Os botões "Agende uma conversa" e "Agende uma demonstração" da Fluxor e da Allocare já usam as duas primeiras. As demais servem para links de campanha, e-mail ou eventos.
+
+O parâmetro vem depois do `#` (não é `?assunto=`). Por isso **não depende de configuração no servidor** e não deve ser removido por regras de reescrita de URL.
+
+## Como publicar
+
+1. Suba o conteúdo da pasta `dist/` (incluindo o arquivo oculto `.htaccess`) na **raiz** do domínio `curaeai.tech`, mantendo as pastas exatamente como estão.
+2. Ative o HTTPS.
+3. Confirme que o servidor entrega `index.html` como página padrão de cada pasta. Apache, Nginx, Netlify, Vercel, Cloudflare Pages e similares já fazem isso por padrão.
+4. Se possível, ative a compressão gzip/brotli no servidor.
+
+**Não renomeie arquivos nem pastas.** Os links internos usam caminhos a partir da raiz (`/allocare/`, `/contato/` etc.) e dependem dessa estrutura.
+
+## Testar antes de subir
+
+Abrindo os arquivos com duplo clique, os links entre páginas não funcionam, porque os caminhos a partir da raiz só funcionam servidos. Isso é normal. Para testar localmente, rode dentro da pasta `dist/`:
+
+```
+python3 -m http.server 8000
+```
+
+Depois acesse `http://localhost:8000`.
+
+## Dependências externas (funcionam sozinhas, não precisa configurar)
+
+- **Google Fonts:** carrega as fontes Bricolage Grotesque e Source Serif 4.
+- **Tally:** formulários de candidatura na página Carreiras.
+- **Links de saída:** WhatsApp (`wa.me`), LinkedIn da Curae e site da Futuro Tech.
+
+## SEO e preview de links
+
+As cinco páginas seguem o mesmo padrão no `<head>`: `<title>`, meta description, canonical, favicon e tags Open Graph (`og:url`, `og:title`, `og:description`, `og:site_name`, `og:locale`).
+
+O canonical e o `og:url` usam sempre o domínio oficial com barra final:
+
+- `https://curaeai.tech/`
+- `https://curaeai.tech/allocare/`
+- `https://curaeai.tech/fluxor/`
+- `https://curaeai.tech/contato/`
+- `https://curaeai.tech/carreiras/`
+
+Por isso o site deve ser publicado em `curaeai.tech`. Se o domínio também responder com `www`, configure redirecionamento 301 de `www.curaeai.tech` para `curaeai.tech`.
+
+A imagem de preview (`og:image`) é o arquivo `og/curae-og.jpg`, com 1200×630 px e usada por todas as páginas. Ela precisa ficar acessível em `https://curaeai.tech/og/curae-og.jpg`, então **suba a pasta `og/` junto com as páginas**. É o único arquivo fora dos HTMLs, porque WhatsApp, LinkedIn e afins só leem imagem com endereço próprio.
+
+Para conferir o preview depois de publicar, use o [Post Inspector do LinkedIn](https://www.linkedin.com/post-inspector/). Ele também força a atualização do cache, caso o link já tenha sido compartilhado antes sem imagem.
+
+Se houver um site antigo no domínio, configure redirecionamentos 301 das URLs antigas para as novas equivalentes. Depois de publicar, envie as URLs no Google Search Console.
+
+## Comportamentos que são intencionais
+
+- **Formulário de contato:** abre o app de e-mail do visitante (mailto). É provisório e será trocado depois.
+- **Botão "Baixar apresentação do produto" (Allocare e Fluxor):** recurso do site, baixa a apresentação embutida na página.
+- **Seções de depoimentos:** estão ocultas de propósito, porque ainda são placeholders. Não reativar.
+
+## Pendências conhecidas
+
+- Os links **Política de Privacidade** e **Termos de Uso** (no rodapé de todas as páginas e no texto do formulário de contato) estão como `#`. Vão ser apontados quando essas páginas existirem.
+
+## Checklist depois de publicar
+
+- [ ] As 5 URLs abrem com HTTPS.
+- [ ] O menu e o rodapé navegam entre todas as páginas.
+- [ ] Os botões "falar com a gente" da Allocare e da Fluxor abrem o contato com o assunto já preenchido.
+- [ ] O layout está correto no celular, sem rolagem lateral.
+- [ ] As fontes carregaram (os títulos aparecem na Bricolage Grotesque, não numa fonte padrão do sistema).
+- [ ] Os links de candidatura em Carreiras abrem o Tally.
+- [ ] `https://curaeai.tech/og/curae-og.jpg` abre direto no navegador.
+- [ ] O preview do link aparece com a imagem ao colar no WhatsApp ou no LinkedIn.

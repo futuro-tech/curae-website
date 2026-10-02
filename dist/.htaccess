@@ -1,10 +1,33 @@
+DirectoryIndex index.html
+Options -Indexes
+
 RewriteEngine On
 RewriteBase /
 
-# Serve real files and directories exactly as they are (JS, CSS, images, etc.)
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
+# Força HTTPS e remove o www (domínio oficial: https://curaeai.tech)
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://curaeai.tech%{REQUEST_URI} [R=301,L]
 
-# Everything else (client-side routes) falls back to index.html
-RewriteRule ^ index.html [L]
+# Garante a barra final nas pastas (/allocare -> /allocare/)
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.*[^/])$ /$1/ [R=301,L]
+
+# URLs antigas: qualquer index.html explícito vai para a pasta
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?]
+RewriteRule ^(.*/)?index\.html$ /%1 [R=301,L]
+
+# Páginas inexistentes voltam para a home
+ErrorDocument 404 /
+
+# Compressão (os HTMLs têm imagens embutidas e ficam bem menores comprimidos)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
+</IfModule>
+
+# Cache: HTML sempre atualizado, imagem de preview por 1 semana
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType image/jpeg "access plus 7 days"
+</IfModule>

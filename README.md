@@ -15,6 +15,11 @@ fluxor/index.html       → https://curaeai.tech/fluxor/
 contato/index.html      → https://curaeai.tech/contato/
 carreiras/index.html    → https://curaeai.tech/carreiras/
 og/curae-og.jpg         → imagem de preview de links
+favicon.ico, favicon.svg,
+favicon-96.png          → ícone da aba do navegador e do resultado no Google
+apple-touch-icon.png,
+icon-192.png, icon-512.png,
+site.webmanifest        → ícone ao salvar o site na tela inicial do celular
 ```
 
 Cada página é um arquivo único e autossuficiente. Imagens, ícones, CSS, JavaScript e animações estão todos embutidos dentro do próprio HTML. A única exceção é `og/curae-og.jpg`, a imagem de preview de links (veja "SEO e preview de links"). Os arquivos ficam entre 90 KB e 1,9 MB por causa das imagens embutidas, e isso é esperado.

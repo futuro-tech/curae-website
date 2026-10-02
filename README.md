@@ -2,12 +2,13 @@
 
 Site estático em HTML puro, com 5 páginas. Não tem build, banco de dados nem dependências para instalar: basta subir os arquivos como estão.
 
-**Tudo o que vai para o servidor está na pasta `dist/`.** Suba o *conteúdo* dela (não a pasta em si) para a raiz do domínio (no Hostinger/cPanel, a pasta `public_html`).
+**Tudo o que vai para o ar está na pasta `dist/`.** O site é publicado automaticamente no GitHub Pages a cada push no `main` (veja "Como publicar").
 
 ## Estrutura (dentro de `dist/`)
 
 ```
-.htaccess               → regras do servidor Apache (HTTPS, sem www, 404, compressão)
+CNAME                   → domínio do GitHub Pages (curaeai.tech)
+404.html                → página de "não encontrada", volta para a home
 index.html              → https://curaeai.tech/
 allocare/index.html     → https://curaeai.tech/allocare/
 fluxor/index.html       → https://curaeai.tech/fluxor/
@@ -44,19 +45,26 @@ O parâmetro vem depois do `#` (não é `?assunto=`). Por isso **não depende de
 
 ## Como publicar
 
-1. Suba o conteúdo da pasta `dist/` (incluindo o arquivo oculto `.htaccess`) na **raiz** do domínio `curaeai.tech`, mantendo as pastas exatamente como estão.
-2. Ative o HTTPS.
-3. Confirme que o servidor entrega `index.html` como página padrão de cada pasta. Apache, Nginx, Netlify, Vercel, Cloudflare Pages e similares já fazem isso por padrão.
-4. Se possível, ative a compressão gzip/brotli no servidor.
+O deploy é automático: cada push (ou merge) no `main` roda o workflow `.github/workflows/deploy.yml`, que publica a pasta `dist/` como está no GitHub Pages, sem build. O andamento aparece na aba **Actions** do repositório.
 
-**Não renomeie arquivos nem pastas.** Os links internos usam caminhos a partir da raiz (`/allocare/`, `/contato/` etc.) e dependem dessa estrutura.
+Para alterar o site, edite os arquivos dentro de `dist/` e faça merge no `main`.
+
+Configuração no GitHub (feita uma vez, em **Settings → Pages**):
+
+1. **Source:** GitHub Actions.
+2. **Custom domain:** `curaeai.tech`.
+3. **Enforce HTTPS:** ativado.
+
+O GitHub Pages já entrega `index.html` como página padrão de cada pasta, completa a barra final (`/allocare` vira `/allocare/`), redireciona `www` para o domínio principal e comprime os arquivos.
+
+**Não renomeie arquivos nem pastas.** Os links internos usam caminhos a partir da raiz (`/allocare/`, `/contato/` etc.) e dependem dessa estrutura. Por isso o site só funciona em `curaeai.tech`, não no endereço de teste `futuro-tech.github.io/curae-website/`.
 
 ## Testar antes de subir
 
 Abrindo os arquivos com duplo clique, os links entre páginas não funcionam, porque os caminhos a partir da raiz só funcionam servidos. Isso é normal. Para testar localmente, rode dentro da pasta `dist/`:
 
 ```
-python3 -m http.server 8000
+python -m http.server 8000
 ```
 
 Depois acesse `http://localhost:8000`.
@@ -79,7 +87,7 @@ O canonical e o `og:url` usam sempre o domínio oficial com barra final:
 - `https://curaeai.tech/contato/`
 - `https://curaeai.tech/carreiras/`
 
-Por isso o site deve ser publicado em `curaeai.tech`. Se o domínio também responder com `www`, configure redirecionamento 301 de `www.curaeai.tech` para `curaeai.tech`.
+Por isso o site deve ser publicado em `curaeai.tech`.
 
 A imagem de preview (`og:image`) é o arquivo `og/curae-og.jpg`, com 1200×630 px e usada por todas as páginas. Ela precisa ficar acessível em `https://curaeai.tech/og/curae-og.jpg`, então **suba a pasta `og/` junto com as páginas**. É o único arquivo fora dos HTMLs, porque WhatsApp, LinkedIn e afins só leem imagem com endereço próprio.
 
